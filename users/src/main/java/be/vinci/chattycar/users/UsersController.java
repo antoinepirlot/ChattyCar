@@ -18,14 +18,14 @@ public class UsersController {
 
     @PostMapping("/users")
     public ResponseEntity<User> createOne(@RequestBody NewUser newUser) {
-        if (newUser.getEmail() == null || !newUser.getEmail().equals("") ||
-            newUser.getFirstname() == null || !newUser.getFirstname().equals("") ||
-            newUser.getLastname() == null || !newUser.getLastname().equals("")) {
+        if (newUser.getEmail() == null || newUser.getEmail().equals("") ||
+            newUser.getFirstname() == null || newUser.getFirstname().equals("") ||
+            newUser.getLastname() == null || newUser.getLastname().equals("")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        boolean created = service.createOne(newUser);
-        if (!created) throw new ResponseStatusException(HttpStatus.CONFLICT);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        User userCreated = service.createOne(newUser);
+        if (userCreated==null) throw new ResponseStatusException(HttpStatus.CONFLICT);
+        return new ResponseEntity<>(userCreated, HttpStatus.CREATED);
     }
 
 }
