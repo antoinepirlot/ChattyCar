@@ -1,0 +1,6 @@
+POST http://localhost:9005/trips
+Content-Type: application/json
+
+{
+  "driverId": 5
+}
