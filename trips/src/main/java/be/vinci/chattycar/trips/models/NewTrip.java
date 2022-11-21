@@ -43,4 +43,8 @@ public class NewTrip {
   private LocalDate departure;
   private int driverId;
   private int availableSeating;
+
+  public Trip toTrip() {
+    return new Trip(0, origin, destination, departure, driverId, availableSeating);
+  }
 }
