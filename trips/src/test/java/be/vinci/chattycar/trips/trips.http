@@ -1,3 +1,6 @@
+GET http://localhost:9005/trips?departureDate=5&?originLat=5&?originLon=5&?destinationLat=5&?destinationLon=5
+
+###
 POST http://localhost:9005/trips
 Content-Type: application/json
 
