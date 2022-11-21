@@ -1,0 +1,107 @@
+openapi: 3.0.3
+info:
+  title: ChattyCars passengers service
+  description: Microservice handling passengers database in ChattyCars project
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:9003'
+    description: Development server
+paths:
+
+  /passengers/tripId/{tripId}:
+    parameters:
+      - name: tripId
+        in: path
+        schema:
+          type: integer
+        example: 1
+        description: id of the trip
+
+    get:
+      summary: Get all passengers of a trip with those waiting, accepted or refused
+      responses:
+        200:
+          description: Returned list of passsengers
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/passenger'
+
+  /passengers/{tripId}/{passengerId}:
+    parameters:
+      - name: id
+        in: path
+        schema:
+          type: integer
+        example: 1
+        description: id of the user
+
+    post:
+      summary: add a passenger to a trip with a waiting status
+      requestBody:
+        description: User to add
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/passenger'
+      responses:
+        400:
+          description: Incorrect id of a passenger
+        409:
+          description: Passenger already in the waiting list
+        201:
+          description: Passenger added
+
+    get:
+      summary: Read the status of a passenger
+      responses:
+        404:
+          description: Passenger not found
+        200:
+          description: Passenger found
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/passenger'
+
+    put:
+      summary: Update a passenger
+      requestBody:
+        description: New status of the passenger
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/passenger'
+      responses:
+        400:
+          description: Incorrect id of a passenger
+        404:
+          description: Passenger not found
+        200:
+          description: Passenger updated
+
+    delete:
+      summary: Delete a passenger
+      responses:
+        404:
+          description: Passenger not found
+        200:
+          description: Passenger deleted
+
+components:
+  schemas:
+    passenger:
+      type: object
+      properties:
+        userId:
+          type: integer
+        passengerId:
+          type: integer
+        status:
+          type: string
+      example:
+        userId: 1
+        passengerId: 1
+        status: waiting
