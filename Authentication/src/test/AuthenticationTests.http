@@ -1,0 +1,35 @@
+### Create credentials
+POST http://localhost:9004/authentication/zoe@gmail.com
+Content-Type: application/json
+
+{
+  "email": "zoe@gmail.com",
+  "password": "azerty"
+}
+
+### Update credentials
+PUT http://localhost:9004/authentication/zoe@gmail.com
+Content-Type: application/json
+
+{
+  "email": "zoe@gmail.com",
+  "password": "password123"
+}
+
+### Delete credentials
+DELETE http://localhost:9004/authentication/zoe@gmail.com
+
+### Connect user
+POST http://localhost:9004/authentication/connect
+Content-Type: application/json
+
+{
+  "email": "zoe@gmail.com",
+  "password": "password123"
+}
+
+### Verify token
+POST http://localhost:9004/authentication/verify
+Content-Type: application/json
+
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhdXRoMCIsImVtYWlsIjoiem9lQGdtYWlsLmNvbSJ9.jEzPDwC7qFTIMMoRldJWTvNrBShkZV7g25Z271hFBy6L0kdOmL4qJzWZrHljWQQf5oDy9-e0kjEAk6ahH4ZzjQ
