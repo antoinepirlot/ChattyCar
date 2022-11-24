@@ -23,11 +23,20 @@ public class UsersService {
   }
 
   /**
-   * Reads a user
+   * Reads a user by email
    * @param email Email of the user
    * @return The user found, or null if the user couldn't be found
    */
-  public User readOne(String email) {
+  public User readOneByEmail(String email) {
     return repository.findByEmail(email);
+  }
+
+  /**
+   * Reads a user by id
+   * @param id Id of the user
+   * @return The user found, or null if the user couldn't be found
+   */
+  public User readOneById(long id) {
+    return repository.findById(id).orElse(null);
   }
 }

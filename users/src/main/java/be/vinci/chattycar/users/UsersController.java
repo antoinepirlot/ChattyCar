@@ -33,7 +33,7 @@ public class UsersController {
 
     @GetMapping("/users")
     public User readOne(@RequestParam String email) {
-        User user = service.readOne(email);
+        User user = service.readOneByEmail(email);
         if (user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         return user;
     }
