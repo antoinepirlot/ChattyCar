@@ -39,4 +39,15 @@ public class UsersService {
   public User readOneById(long id) {
     return repository.findById(id).orElse(null);
   }
+
+  /**
+   * Updates a user
+   * @param user User to update
+   * @return True if the user could be updated, false if the user couldn't be found
+   */
+  public boolean updateOne(User user) {
+    if (!repository.existsById(user.getId())) return false;
+    repository.save(user);
+    return true;
+  }
 }
