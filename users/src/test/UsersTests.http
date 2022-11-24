@@ -7,3 +7,6 @@ Content-Type: application/json
   "firstname": "stef",
   "lastname": "mir"
 }
+
+### Read user
+GET http://localhost:9003/users?email=loltest@gmail.com
