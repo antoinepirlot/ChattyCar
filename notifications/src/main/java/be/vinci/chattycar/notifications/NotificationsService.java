@@ -25,6 +25,13 @@ public class NotificationsService {
     return notification;
   }
 
-
+  /**
+   * Reads all notifications from a user
+   * @param userId Id of the user
+   * @return The list of notifications from this user
+   */
+  public Iterable<Notification> readNotificationsFromUserId(int userId) {
+    return repository.findByUser_id(userId);
+  }
 
 }
