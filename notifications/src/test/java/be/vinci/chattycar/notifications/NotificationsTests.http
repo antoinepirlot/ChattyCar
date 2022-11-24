@@ -1,0 +1,10 @@
+### Create user
+POST http://localhost:9004/notifications
+Content-Type: application/json
+
+{
+  "user_id": 12,
+  "trip_id": 38,
+  "date": "2022-10-24",
+  "notification_text" : "Votre demande de voyage a été acceptée"
+}
