@@ -50,4 +50,15 @@ public class UsersService {
     repository.save(user);
     return true;
   }
+
+  /**
+   * Deletes a user
+   * @param id Id of the user
+   * @return True if the user could be deleted, false if the user couldn't be found
+   */
+  public boolean deleteOneById(long id) {
+    if (!repository.existsById(id)) return false;
+    repository.deleteById(id);
+    return true;
+  }
 }
