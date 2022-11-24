@@ -24,3 +24,6 @@ Content-Type: application/json
   "firstname": "stf",
   "lastname": "mir"
 }
+
+### Delete user
+DELETE http://localhost:9003/users/1
