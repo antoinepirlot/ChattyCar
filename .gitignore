@@ -26,7 +26,6 @@ HELP.md
 *.properties
 
 ### IntelliJ IDEA ###
-.idea
 *.iws
 *.ipr
 

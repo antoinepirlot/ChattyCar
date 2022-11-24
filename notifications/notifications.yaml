@@ -19,8 +19,6 @@ paths:
       responses:
         400:
           description: Notification in request is not correct
-        409:
-          description: A notification already exists with this user id and trip id
         201:
           description: Notification is created, sent notification created
           content:
