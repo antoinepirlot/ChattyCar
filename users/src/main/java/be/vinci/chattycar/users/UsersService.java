@@ -21,4 +21,13 @@ public class UsersService {
     repository.save(user);
     return user;
   }
+
+  /**
+   * Reads a user
+   * @param email Email of the user
+   * @return The user found, or null if the user couldn't be found
+   */
+  public User readOne(String email) {
+    return repository.findByEmail(email);
+  }
 }
