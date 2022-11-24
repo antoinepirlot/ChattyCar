@@ -1,4 +1,4 @@
-### Create user
+### Create notification
 POST http://localhost:9004/notifications
 Content-Type: application/json
 
