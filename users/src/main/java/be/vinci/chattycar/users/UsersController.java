@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,6 +44,17 @@ public class UsersController {
         User user = service.readOneById(id);
         if (user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         return user;
+    }
+
+    @PutMapping("/users/{id}")
+    public void updateOne(@PathVariable long id, @RequestBody User user) {
+        if (user.getId() <1 || user.getId() !=id || user.getEmail().equals("") ||
+            user.getFirstname() == null || user.getFirstname().equals("") ||
+            user.getLastname() == null || user.getLastname().equals("")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        boolean userFound = service.updateOne(user);
+        if (!userFound) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
 }
