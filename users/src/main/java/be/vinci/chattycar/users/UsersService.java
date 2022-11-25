@@ -36,7 +36,7 @@ public class UsersService {
    * @param id Id of the user
    * @return The user found, or null if the user couldn't be found
    */
-  public User readOneById(long id) {
+  public User readOneById(int id) {
     return repository.findById(id).orElse(null);
   }
 
@@ -56,7 +56,7 @@ public class UsersService {
    * @param id Id of the user
    * @return True if the user could be deleted, false if the user couldn't be found
    */
-  public boolean deleteOneById(long id) {
+  public boolean deleteOneById(int id) {
     if (!repository.existsById(id)) return false;
     repository.deleteById(id);
     return true;
