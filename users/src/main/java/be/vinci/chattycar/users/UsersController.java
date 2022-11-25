@@ -41,14 +41,14 @@ public class UsersController {
     }
 
     @GetMapping("/users/{id}")
-    public User readOneById(@PathVariable long id) {
+    public User readOneById(@PathVariable int id) {
         User user = service.readOneById(id);
         if (user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         return user;
     }
 
     @PutMapping("/users/{id}")
-    public void updateOne(@PathVariable long id, @RequestBody User user) {
+    public void updateOne(@PathVariable int id, @RequestBody User user) {
         if (user.getId() <1 || user.getId() !=id || user.getEmail().equals("") ||
             user.getFirstname() == null || user.getFirstname().equals("") ||
             user.getLastname() == null || user.getLastname().equals("")) {
@@ -59,7 +59,7 @@ public class UsersController {
     }
 
     @DeleteMapping("/users/{id}")
-    public void deleteOne(@PathVariable long id) {
+    public void deleteOne(@PathVariable int id) {
         boolean userFound = service.deleteOneById(id);
         if (!userFound) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
