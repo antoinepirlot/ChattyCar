@@ -3,9 +3,11 @@ POST http://localhost:9004/notifications
 Content-Type: application/json
 
 {
-  "user_id": 12,
-  "trip_id": 38,
+  "userId": 12,
+  "tripId": 38,
   "date": "2022-10-24",
-  "notification_text" : "Votre demande de voyage a été acceptée"
+  "notificationText" : "Votre demande de voyage a été acceptée2"
 }
 
+### Read notifications from user
+GET http://localhost:9004/notifications/user/12

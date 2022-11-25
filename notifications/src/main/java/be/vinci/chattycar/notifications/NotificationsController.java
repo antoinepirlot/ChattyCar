@@ -29,9 +29,9 @@ public class NotificationsController {
     }
     return new ResponseEntity<>(service.createOne(newNotification), HttpStatus.CREATED);
   }
-/*
-  @GetMapping("/notifications/users/{id}")
+
+  @GetMapping("/notifications/user/{id}")
   public Iterable<Notification> readFromUser(@PathVariable int id) {
     return service.readNotificationsFromUserId(id);
-  }*/
+  }
 }
