@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface NotificationsRepository extends CrudRepository<Notification, Integer> {
 
-  Iterable<Notification> findByUser_id(int userId);
+  Iterable<Notification> findByUserId(int userId);
 }

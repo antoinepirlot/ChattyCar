@@ -1,5 +1,7 @@
 package be.vinci.chattycar.notifications.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,10 +21,14 @@ import lombok.ToString;
 public class Notification {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int notification_id;
-  private int user_id;
-  private int trip_id;
+  @Column(name = "notification_id")
+  private int notificationId;
+  @Column(name = "user_id")
+  private int userId;
+  @Column(name = "trip_id")
+  private int tripId;
   private String date;
-  private String notification_text;
+  @Column(name = "notification_text")
+  private String notificationText;
 
 }
