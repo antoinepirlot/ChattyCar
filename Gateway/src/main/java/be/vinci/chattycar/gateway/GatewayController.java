@@ -3,6 +3,7 @@ package be.vinci.chattycar.gateway;
 import be.vinci.chattycar.gateway.models.Credentials;
 import be.vinci.chattycar.gateway.models.InsecureCredentials;
 import be.vinci.chattycar.gateway.models.NewUser;
+import be.vinci.chattycar.gateway.models.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +21,8 @@ public class GatewayController {
   }
 
   @PostMapping("/users")
-  ResponseEntity<Void> createOneUser(@RequestBody NewUser newUser){
-    return service.createOneUser(newUser.getEmail(), newUser.getInsecureCredentials());
+  ResponseEntity<User> createOneUser(@RequestBody NewUser newUser){
+    return service.createOneUser(newUser);
   }
 
   @PutMapping("/users")
