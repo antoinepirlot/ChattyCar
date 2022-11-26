@@ -1,10 +1,10 @@
 package be.vinci.chattycar.gateway;
 
 import be.vinci.chattycar.gateway.models.Credentials;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import be.vinci.chattycar.gateway.models.InsecureCredentials;
+import be.vinci.chattycar.gateway.models.NewUser;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = { "http://localhost:80" })
 @RestController
@@ -18,4 +18,18 @@ public class GatewayController {
   String connect(@RequestBody Credentials credentials) {
     return service.connect(credentials);
   }
+
+  @PostMapping("/users")
+  ResponseEntity<Void> createOneUser(@RequestBody NewUser newUser){
+    return service.createOneUser(newUser.getEmail(), newUser.getInsecureCredentials());
+  }
+
+  @PutMapping("/users")
+  void updateUserPassword(@RequestBody Credentials credentials){
+    InsecureCredentials insecureCredentials = new InsecureCredentials();
+    insecureCredentials.setEmail(credentials.getEmail());
+    insecureCredentials.setPassword(credentials.getPassword());
+    service.updateUserCredentials(credentials.getEmail(), insecureCredentials);
+  }
+
 }
