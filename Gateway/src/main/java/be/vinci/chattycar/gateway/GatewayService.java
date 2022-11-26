@@ -38,5 +38,21 @@ public class GatewayService {
     authenticationProxy.updateOne(email, credentials);
   }
 
+  public User getUserByEmail(String email){
+    return usersProxy.getOneByEmail(email);
+  }
+
+  public User getUserById(int id){
+    return usersProxy.getOneById(id);
+  }
+
+  public void updateUser(User user){
+    usersProxy.updateOne(user.getId(), user);
+  }
+
+  public void deleteUser(int id){
+    usersProxy.deleteOne(id);
+  }
+
 
 }
