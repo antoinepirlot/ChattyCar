@@ -58,4 +58,16 @@ public class GatewayController {
     return service.createOneTrip(newTrip);
   }
 
+  @GetMapping("/trips/{id}")
+  Trip getOneTripById(@PathVariable int id){
+    return service.getTripById(id);
+  }
+
+  @DeleteMapping("/trips/{id}")
+  void deleteOneTrip(@PathVariable int id){
+    service.deleteTrip(id);
+  }
+
+
+
 }
