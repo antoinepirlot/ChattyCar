@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @CrossOrigin(origins = { "http://localhost:80" })
 @RestController
 public class GatewayController {
@@ -37,8 +39,8 @@ public class GatewayController {
     return service.getUserByEmail(email);
   }
 
-  @GetMapping("/users")
-  User getOneUserById(@RequestParam int id){
+  @GetMapping("/users/{id}")
+  User getOneUserById(@PathVariable int id){
     return service.getUserById(id);
   }
 
@@ -66,6 +68,16 @@ public class GatewayController {
   @DeleteMapping("/trips/{id}")
   void deleteOneTrip(@PathVariable int id){
     service.deleteTrip(id);
+  }
+
+  @GetMapping("/trips/{id}/passengers")
+  List<Passengers> getPassengersOfATripById(@PathVariable int id){
+    return service.getPassengersOfATripById(id);
+  }
+
+  @PostMapping("/trips/{tripId}/passengers/{passenger_id}")
+  void addPassengerToATrip(@PathVariable int tripId, @PathVariable int passengerId){
+    service.addPassengerToATrip(tripId, passengerId);
   }
 
 

@@ -1,12 +1,15 @@
 package be.vinci.chattycar.gateway;
 
 import be.vinci.chattycar.gateway.data.AuthenticationProxy;
+import be.vinci.chattycar.gateway.data.PassengersProxy;
 import be.vinci.chattycar.gateway.data.TripsProxy;
 import be.vinci.chattycar.gateway.data.UsersProxy;
 import be.vinci.chattycar.gateway.models.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
 
 @Service
 public class GatewayService {
@@ -16,11 +19,13 @@ public class GatewayService {
   private final AuthenticationProxy authenticationProxy;
   private final UsersProxy usersProxy;
   private final TripsProxy tripsProxy;
+  private final PassengersProxy passengersProxy;
 
-  public GatewayService(AuthenticationProxy authenticationProxy, UsersProxy usersProxy, TripsProxy tripsProxy) {
+  public GatewayService(AuthenticationProxy authenticationProxy, UsersProxy usersProxy, TripsProxy tripsProxy, PassengersProxy passengersProxy) {
     this.authenticationProxy = authenticationProxy;
     this.usersProxy = usersProxy;
     this.tripsProxy = tripsProxy;
+    this.passengersProxy = passengersProxy;
   }
 
   public String connect(Credentials credentials) {
@@ -30,8 +35,7 @@ public class GatewayService {
   public ResponseEntity<User> createOneUser(NewUser newUser){
     //TODO : demander au prof comment faire une transaction
     //TODO : gérer les cas en fct de la réponse
-    ResponseEntity<Void> responseAuth =
-            authenticationProxy.createOne(newUser.getEmail(), newUser.getInsecureCredentials());
+    ResponseEntity<Void> responseAuth = authenticationProxy.createOne(newUser.getEmail(), newUser.getInsecureCredentials());
     ResponseEntity<User> responseUser = usersProxy.createOne(newUser);
     return responseUser;
   }
@@ -66,6 +70,14 @@ public class GatewayService {
 
   public void deleteTrip(int id){
     tripsProxy.deleteOne(id);
+  }
+
+  public List<Passengers> getPassengersOfATripById(int id){
+    return passengersProxy.getAllPassengersFromATrip(id);
+  }
+
+  public void addPassengerToATrip(int tripId, int passengerId){
+    passengersProxy.addPassengerToATrip(tripId, new Passengers(passengerId, passengerId, "pending")); //TODO : changer id ??
   }
 
 
