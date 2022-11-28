@@ -32,7 +32,6 @@ public class TripsController {
       @RequestParam(required = false) double destinationLat,
       @RequestParam(required = false) double destinationLon
   ) {
-//    System.out.println(LocalDate.parse(departureDate).getYear());
     List<Trip> trips = this.service.getAll(
         departureDate, originLat, originLon, destinationLat, destinationLon
     );

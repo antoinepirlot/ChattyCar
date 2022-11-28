@@ -36,9 +36,9 @@ public class TripsService {
 
   public List<Trip> getAll(LocalDate departureDate, double originLat, double originLon,
       double destinationLat, double destinationLon) {
-    //TODO filtering
-    List<Trip> trips = this.repository.getTripsBy();
-
+    List<Trip> trips = this.repository.getTripsByOrderByIdDesc();
+    List<Trip> trips1 = trips.stream().filter(t -> t.getAvailableSeating() > 0).toList();
+    //TODO calcul distance avec positions qui calcule la distance
     return trips;
   }
 }
