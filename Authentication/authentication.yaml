@@ -49,11 +49,12 @@ paths:
                 type: string
                 example: Cat4Life
 
-  /authentication/{pseudo}:
+  /authentication/{email}:
     parameters:
-      - name: pseudo
+      - name: email
+        required: true
         in: path
-        description: Pseudo of the user
+        description: Email of the user
         schema:
           type: string
 
