@@ -1,6 +1,5 @@
 package be.vinci.chattycar.notifications.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

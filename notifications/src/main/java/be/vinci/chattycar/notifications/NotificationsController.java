@@ -28,6 +28,8 @@ public class NotificationsController {
         newNotification.getTripId()<1 || newNotification.getUserId()<1) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
+    Notification notificationCreated =service.createOne(newNotification);
+    if(notificationCreated==null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     return new ResponseEntity<>(service.createOne(newNotification), HttpStatus.CREATED);
   }
 

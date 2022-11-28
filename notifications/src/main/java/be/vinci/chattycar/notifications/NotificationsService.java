@@ -4,7 +4,6 @@ import be.vinci.chattycar.notifications.data.NotificationsRepository;
 import be.vinci.chattycar.notifications.data.UsersProxy;
 import be.vinci.chattycar.notifications.models.NewNotification;
 import be.vinci.chattycar.notifications.models.Notification;
-import be.vinci.chattycar.notifications.models.User;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,9 +20,14 @@ public class NotificationsService {
   /**
    * Creates a notification
    * @param newNotification Notification to create
-   * @return notification created
+   * @return notification created, null if the user id or trip id don't exist
    */
   public Notification createOne(NewNotification newNotification) {
+    try {
+      usersProxy.readOneById(newNotification.getUserId());
+    } catch (Exception e) {
+      return null;
+    }
     Notification notification = newNotification.toNotification();
     repository.save(notification);
     return notification;
@@ -46,6 +50,7 @@ public class NotificationsService {
   /**
    * Deletes all notifications from a user
    * @param userId Id of the user
+   * @return true if notifications from the user could be deleted, false if not
    */
   public boolean deleteNotificationsFromUserId(int userId) {
     try {

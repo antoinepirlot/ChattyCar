@@ -19,6 +19,8 @@ paths:
       responses:
         400:
           description: Notification in request is not correct
+        404:
+          description: No user found with this ID or no trip found with this ID
         201:
           description: Notification is created, sent notification created
           content:
