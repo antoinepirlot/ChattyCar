@@ -24,8 +24,8 @@ public class PositionsService {
     startLat = Math.toRadians(startLat);
     endLat = Math.toRadians(endLat);
     double distanceInMeters = Math.acos(
-        Math.sin(startLon) * Math.sin(endLong)
-            + Math.cos(startLon) * Math.cos(endLong) * Math.cos(startLat - endLat)
+        Math.sin(startLat) * Math.sin(endLat)
+            + Math.cos(startLat) * Math.cos(endLat) * Math.cos(startLon - endLong)
     ) * EARTH_RADIUS;
     return (int) Math.ceil(distanceInMeters);
   }
