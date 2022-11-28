@@ -37,7 +37,7 @@ paths:
           description: Trip's passengers are deleted
 
 
-  /passengers/{trip_id}/{user_id}:
+  /passengers/{trip_id}/user/{user_id}:
     parameters:
       - name: trip_id
         in: path
@@ -107,7 +107,7 @@ paths:
         404:
           description: Trip or user not found
 
-  /passengers/{user_id}:
+  /passengers/user/{user_id}:
       parameters:
         - name: user_id
           in: path
