@@ -8,7 +8,7 @@ servers:
     description: Development server
 paths:
 
-  /inscriptions/{trip_id}:
+  /passengers/{trip_id}:
     parameters:
       - name: trip_id
         in: path
@@ -34,10 +34,10 @@ paths:
         404:
           description: No trip found with this ID
         201:
-          description: Trip's inscriptions are deleted
+          description: Trip's passengers are deleted
 
 
-  /inscriptions/{trip_id}/{passenger_id}:
+  /passengers/{trip_id}/{user_id}:
     parameters:
       - name: trip_id
         in: path
@@ -46,22 +46,22 @@ paths:
           type: integer
         example: 1
         description: id of the trip
-      - name: passenger_id
+      - name: user_id
         in: path
         required: true
         schema:
           type: integer
         example: 1
-        description: id of the trip
+        description: id of the user
     post:
-      summary: Add user as passenger to a trip with pending status (create inscription)
+      summary: Add user as passenger to a trip with pending status (create passenger)
       responses:
         201:
           description: User added as pending passenger
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inscription'
+                $ref: '#/components/schemas/passenger'
         400:
           description: User is already a passenger, or the ride has no available seating left
         404:
@@ -69,18 +69,18 @@ paths:
         500:
           description: internal server error
     get:
-      summary: Get passenger status (inscription)
+      summary: Get passenger status
       responses:
         200:
-          description: Sent passenger status (get inscription)
+          description: Get passenger
           content:
             'application/json':
               schema:
-                $ref: '#/components/schemas/inscription'
+                $ref: '#/components/schemas/passenger'
         404:
           description: Trip or user not found
     put:
-      summary: Update passenger status (inscription)
+      summary: Update passenger status
       parameters:
         - name: status
           in: query
@@ -107,7 +107,7 @@ paths:
         404:
           description: Trip or user not found
 
-  /inscriptions/passengers/{user_id}:
+  /passengers/{user_id}:
       parameters:
         - name: user_id
           in: path
@@ -139,12 +139,12 @@ paths:
 
 components:
   schemas:
-    inscription:
+    passenger:
       type: object
       properties:
         trip_id:
           type: integer
-        passenger_id:
+        user_id:
           type: integer
         status:
           type: string
