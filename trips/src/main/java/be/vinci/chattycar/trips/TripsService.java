@@ -24,13 +24,21 @@ public class TripsService {
         newTrip.getDeparture())) {
       return null;
     }
-    return this.repository.save(newTrip.toTrip());
+    var toSave = newTrip.toTrip();
+    Trip res = null;
+    try {
+      res = this.repository.save(toSave);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    return res;
   }
 
   public List<Trip> getAll(LocalDate departureDate, double originLat, double originLon,
       double destinationLat, double destinationLon) {
     //TODO filtering
     List<Trip> trips = this.repository.getTripsBy();
+
     return trips;
   }
 }

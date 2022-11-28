@@ -15,10 +15,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
-@Entity(name = "positions")
 public class Position {
-  @Id
-  private int id;
   private double latitude;
   private double longitude;
 }
