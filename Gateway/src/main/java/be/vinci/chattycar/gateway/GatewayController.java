@@ -48,8 +48,11 @@ public class GatewayController {
   }
 
   @PutMapping("/users/{id}")
-  void updateOneUser(@PathVariable int id, @RequestBody User user){
+  void updateOneUser(@PathVariable int id, @RequestBody User user, @RequestHeader("Authorization") String token){
     if(id != user.getId()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    service.getUserById(id);
+    String emailFromToken = service.verifyToken(token);
+    if(!emailFromToken.equals(user.getEmail())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     service.updateUser(user);
   }
 
