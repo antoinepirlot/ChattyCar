@@ -14,8 +14,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @Getter
 @Setter
@@ -39,7 +37,6 @@ public class Trip {
       @AttributeOverride(name = "longitude", column = @Column(name = "destination_longitude")),
   })
   private Position destination;
-  @DateTimeFormat(iso = ISO.DATE)
   private LocalDate departure;
   private int driverId;
   private int availableSeating;
