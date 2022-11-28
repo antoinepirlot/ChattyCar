@@ -32,6 +32,8 @@ public class NotificationsController {
 
   @GetMapping("/notifications/user/{id}")
   public Iterable<Notification> readFromUser(@PathVariable int id) {
-    return service.readNotificationsFromUserId(id);
+    Iterable<Notification> notifications = service.readNotificationsFromUserId(id);
+    if(notifications == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    return notifications;
   }
 }
