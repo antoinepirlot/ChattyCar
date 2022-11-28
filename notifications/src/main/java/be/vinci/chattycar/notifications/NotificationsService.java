@@ -43,4 +43,12 @@ public class NotificationsService {
     return repository.findByUserId(userId);
   }
 
+  /**
+   * Deletes all notifications from a user
+   * @param userId Id of the user
+   */
+  public void deleteNotificationsFromUserId(int userId) {
+    repository.deleteByUserId(userId);
+  }
+
 }
