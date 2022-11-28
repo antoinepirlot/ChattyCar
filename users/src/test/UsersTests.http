@@ -1,0 +1,29 @@
+### Create user
+POST http://localhost:9003/users
+Content-Type: application/json
+
+{
+  "email": "loltes@gmail.com",
+  "firstname": "stef",
+  "lastname": "mir"
+}
+
+### Read user by email
+GET http://localhost:9003/users?email=loltest@gmail.com
+
+### Read user by id
+GET http://localhost:9003/users/1
+
+### Update user
+PUT http://localhost:9003/users/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "email": "loltest@gmail.com",
+  "firstname": "stf",
+  "lastname": "mir"
+}
+
+### Delete user
+DELETE http://localhost:9003/users/1
