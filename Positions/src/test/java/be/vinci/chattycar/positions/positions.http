@@ -1,0 +1,1 @@
+GET http://localhost:9004/positions?startLon=50.845275&endLon=52.354875&startLat=54.254769&endLat=45.253698
