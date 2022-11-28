@@ -1,1 +1,42 @@
+### 200 status expected
 GET http://localhost:9004/positions?startLon=50.845275&endLon=52.354875&startLat=54.254769&endLat=45.253698
+
+
+### 400 status expected
+GET http://localhost:9004/positions
+
+### 400 status expected
+GET http://localhost:9004/positions?endLon=52.354875&startLat=54.254769&endLat=45.253698
+
+### 400 status expected
+GET http://localhost:9004/positions?startLon=50.845275&startLat=54.254769&endLat=45.253698
+
+### 400 status expected
+GET http://localhost:9004/positions?startLon=50.845275&endLon=52.354875&endLat=45.253698
+
+### 400 status expected
+GET http://localhost:9004/positions?startLon=50.845275&endLon=52.354875&startLat=54.254769
+
+### 400 status expected
+GET http://localhost:9004/positions?startLat=54.254769&endLat=45.253698
+
+### 400 status expected
+GET http://localhost:9004/positions?endLon=52.354875&endLat=45.253698
+
+### 400 status expected
+GET http://localhost:9004/positions?endLon=52.354875&startLat=54.254769
+
+### 400 status expected
+GET http://localhost:9004/positions?startLon=50.845275&startLat=54.254769
+
+### 400 status expected
+GET http://localhost:9004/positions?startLon=50.845275
+
+### 400 status expected
+GET http://localhost:9004/positions?endLon=52.354875
+
+### 400 status expected
+GET http://localhost:9004/positions?startLat=54.254769
+
+### 400 status expected
+GET http://localhost:9004/positions?endLat=45.253698
