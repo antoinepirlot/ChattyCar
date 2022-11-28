@@ -16,7 +16,7 @@ public interface UsersProxy {
     @GetMapping("/users")
     User getOneByEmail(@RequestParam String email);
 
-    @GetMapping("/users")
+    @GetMapping("/users/{id}")
     User getOneById(@PathVariable int id);
 
     @PutMapping("/users/{id}")

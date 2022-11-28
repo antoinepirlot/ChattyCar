@@ -1,12 +1,12 @@
 package be.vinci.chattycar.gateway.models;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class InsecureCredentials {
     private String email;
     private String password;

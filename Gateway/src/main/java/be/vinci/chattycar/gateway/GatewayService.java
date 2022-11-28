@@ -5,9 +5,12 @@ import be.vinci.chattycar.gateway.data.PassengersProxy;
 import be.vinci.chattycar.gateway.data.TripsProxy;
 import be.vinci.chattycar.gateway.data.UsersProxy;
 import be.vinci.chattycar.gateway.models.*;
+import feign.FeignException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -32,10 +35,12 @@ public class GatewayService {
     return authenticationProxy.connect(credentials);
   }
 
+  public String verifyToken(String token){return authenticationProxy.verify(token);}
+
   public ResponseEntity<User> createOneUser(NewUser newUser){
     //TODO : gérer les cas en fct de la réponse
-    ResponseEntity<Void> responseAuth = authenticationProxy.createOne(newUser.getEmail(), newUser.getInsecureCredentials());
     ResponseEntity<User> responseUser = usersProxy.createOne(newUser);
+    ResponseEntity<Void> responseAuth = authenticationProxy.createOne(newUser.getEmail(), newUser.getInsecureCredentials());
     return responseUser;
   }
 

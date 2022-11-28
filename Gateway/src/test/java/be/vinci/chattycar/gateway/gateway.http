@@ -1,17 +1,65 @@
-### Connect user
-POST http://localhost:9000/users
+### Create user
+POST http://localhost:9001/users
 Content-Type: application/json
 
 {
-  "email": "test@test.com",
-  "password": "test"
+  "email": "nico@gmail.com",
+  "firstname": "nicolas",
+  "lastname": "poppe",
+  "password": "password123"
 }
 
-###
+### Create user zoe
+POST http://localhost:9001/users
+Content-Type: application/json
+
+{
+  "email": "zoe@gmail.com",
+  "firstname": "zoe",
+  "lastname": "levaux",
+  "password": "123password321"
+}
+
+### get user
+GET http://localhost:9001/users?email=nico@gmail.com
+
+
+### Connect user
 POST http://localhost:9001/auth
 Content-Type: application/json
 
 {
-"email": "zoe@gmail.com",
-"password": "password123"
+  "email": "nico@gmail.com",
+  "password": "password123"
+}
+
+> {%
+ client.global.set("userToken", response.body);
+ %}
+
+### Connect user zoe
+POST http://localhost:9001/auth
+Content-Type: application/json
+
+{
+  "email": "zoe@gmail.com",
+  "password": "password321"
+}
+
+> {%
+ client.global.set("userTokenZoe", response.body);
+ %}
+
+### get user by id
+GET http://localhost:9001/users/1
+Authorization: {{userToken}}
+
+### update user password
+PUT http://localhost:9001/users
+Content-Type: application/json
+Authorization: {{userToken}}
+
+{
+  "email": "ntyj@gmail.com",
+  "password": "oncle22"
 }

@@ -27,11 +27,13 @@ public class GatewayController {
   }
 
   @PutMapping("/users")
-  void updateUserPassword(@RequestBody Credentials credentials){
-    InsecureCredentials insecureCredentials = new InsecureCredentials();
-    insecureCredentials.setEmail(credentials.getEmail());
-    insecureCredentials.setPassword(credentials.getPassword());
-    service.updateUserCredentials(credentials.getEmail(), insecureCredentials);
+  void updateUserPassword(@RequestBody Credentials credentials, @RequestHeader("Authorization") String token ){
+    String emailFromToken = service.verifyToken(token);
+    //check if the email exists
+    service.getUserByEmail(credentials.getEmail());
+
+    if(!emailFromToken.equals(credentials.getEmail())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    service.updateUserCredentials(credentials.getEmail(), new InsecureCredentials(credentials.getEmail(),credentials.getPassword()));
   }
 
   @GetMapping("/users")
@@ -40,7 +42,8 @@ public class GatewayController {
   }
 
   @GetMapping("/users/{id}")
-  User getOneUserById(@PathVariable int id){
+  User getOneUserById(@PathVariable int id, @RequestHeader("Authorization") String token){
+    service.verifyToken(token);
     return service.getUserById(id);
   }
 

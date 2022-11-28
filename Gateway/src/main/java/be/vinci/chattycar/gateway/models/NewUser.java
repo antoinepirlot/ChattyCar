@@ -1,14 +1,12 @@
 package be.vinci.chattycar.gateway.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class NewUser {
     private String email;
     private String firstname;
@@ -19,6 +17,8 @@ public class NewUser {
         InsecureCredentials insecureCredentials = new InsecureCredentials();
         insecureCredentials.setEmail(email);
         insecureCredentials.setPassword(password);
+        System.out.println("insecure credentials");
+        System.out.println(insecureCredentials);
         return insecureCredentials;
     }
 }
