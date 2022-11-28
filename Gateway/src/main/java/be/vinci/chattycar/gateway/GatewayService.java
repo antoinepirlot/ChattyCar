@@ -33,7 +33,6 @@ public class GatewayService {
   }
 
   public ResponseEntity<User> createOneUser(NewUser newUser){
-    //TODO : demander au prof comment faire une transaction
     //TODO : gérer les cas en fct de la réponse
     ResponseEntity<Void> responseAuth = authenticationProxy.createOne(newUser.getEmail(), newUser.getInsecureCredentials());
     ResponseEntity<User> responseUser = usersProxy.createOne(newUser);
