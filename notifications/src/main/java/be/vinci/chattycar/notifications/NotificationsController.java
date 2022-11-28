@@ -40,6 +40,7 @@ public class NotificationsController {
 
   @DeleteMapping("/notifications/users/{id}")
   public void deleteFromUser(@PathVariable int id) {
-    service.deleteNotificationsFromUserId(id);
+    if(!service.deleteNotificationsFromUserId(id))
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
   }
 }

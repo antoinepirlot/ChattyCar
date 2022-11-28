@@ -47,8 +47,14 @@ public class NotificationsService {
    * Deletes all notifications from a user
    * @param userId Id of the user
    */
-  public void deleteNotificationsFromUserId(int userId) {
+  public boolean deleteNotificationsFromUserId(int userId) {
+    try {
+      usersProxy.readOneById(userId);
+    } catch (Exception e) {
+      return false;
+    }
     repository.deleteByUserId(userId);
+    return true;
   }
 
 }
