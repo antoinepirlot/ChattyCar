@@ -6,3 +6,12 @@ Content-Type: application/json
   "email": "test@test.com",
   "password": "test"
 }
+
+###
+POST http://localhost:9001/auth
+Content-Type: application/json
+
+{
+"email": "zoe@gmail.com",
+"password": "password123"
+}
