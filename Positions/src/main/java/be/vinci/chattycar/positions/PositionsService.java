@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PositionsService {
-  private static final long EARTH_RADIUS = 6378;
+  private static final long EARTH_RADIUS = 6378137;
 
   public PositionsService() {
 
@@ -26,7 +26,7 @@ public class PositionsService {
     double distanceInMeters = Math.acos(
         Math.sin(startLon) * Math.sin(endLong)
             + Math.cos(startLon) * Math.cos(endLong) * Math.cos(startLat - endLat)
-    ) * EARTH_RADIUS * 1000;
+    ) * EARTH_RADIUS;
     return (int) Math.ceil(distanceInMeters);
   }
 }
