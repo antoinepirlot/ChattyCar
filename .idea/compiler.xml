@@ -9,15 +9,17 @@
         <outputRelativeToContentRoot value="true" />
         <module name="EurekaServer" />
         <module name="Passengers" />
-        <module name="Gateway" />
         <module name="trips" />
         <module name="Authentication" />
+        <module name="Gateway" />
         <module name="Notifications" />
         <module name="users" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Authentication" target="17" />
+      <module name="Authentication (1)" target="17" />
+      <module name="Authentication (2)" target="17" />
       <module name="EurekaServer" target="17" />
       <module name="Gateway" target="17" />
       <module name="Notifications" target="17" />
@@ -29,6 +31,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Authentication" options="-parameters" />
+      <module name="Authentication (1)" options="-parameters" />
       <module name="EurekaServer" options="-parameters" />
       <module name="Gateway" options="-parameters" />
       <module name="Notifications" options="-parameters" />
