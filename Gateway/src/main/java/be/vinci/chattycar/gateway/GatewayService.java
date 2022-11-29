@@ -1,16 +1,13 @@
 package be.vinci.chattycar.gateway;
 
 import be.vinci.chattycar.gateway.data.AuthenticationProxy;
+import be.vinci.chattycar.gateway.data.NotificationProxy;
 import be.vinci.chattycar.gateway.data.PassengersProxy;
 import be.vinci.chattycar.gateway.data.TripsProxy;
 import be.vinci.chattycar.gateway.data.UsersProxy;
 import be.vinci.chattycar.gateway.models.*;
-import feign.FeignException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -23,12 +20,15 @@ public class GatewayService {
   private final UsersProxy usersProxy;
   private final TripsProxy tripsProxy;
   private final PassengersProxy passengersProxy;
+  private final NotificationProxy notificationProxy;
 
-  public GatewayService(AuthenticationProxy authenticationProxy, UsersProxy usersProxy, TripsProxy tripsProxy, PassengersProxy passengersProxy) {
+  public GatewayService(AuthenticationProxy authenticationProxy, UsersProxy usersProxy, TripsProxy tripsProxy, PassengersProxy passengersProxy,
+      NotificationProxy notificationProxy) {
     this.authenticationProxy = authenticationProxy;
     this.usersProxy = usersProxy;
     this.tripsProxy = tripsProxy;
     this.passengersProxy = passengersProxy;
+    this.notificationProxy = notificationProxy;
   }
 
   public String connect(Credentials credentials) {
@@ -82,6 +82,14 @@ public class GatewayService {
 
   public void addPassengerToATrip(int tripId, int passengerId){
     passengersProxy.addPassengerToATrip(tripId, new Passengers(passengerId, passengerId, "pending")); //TODO : changer id ??
+  }
+
+  public Iterable<Notification> getAllNotificationsFromUser(int id){
+    return notificationProxy.readFromUser(id);
+  }
+
+  public void deleteAllNotificationsFromUser(int id){
+    notificationProxy.deleteFromUser(id);
   }
 
 

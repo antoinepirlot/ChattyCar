@@ -61,6 +61,24 @@ public class GatewayController {
     service.deleteUser(id);
   }
 
+  //TODO : en dessous, il faut tester
+
+  @GetMapping("/users/{id}/notifications")
+  Iterable<Notification> getNotificationsFromOneUser(@PathVariable int id, @RequestHeader("Authorization") String token){
+    String emailFromToken = service.verifyToken(token);
+    if(service.getUserByEmail(emailFromToken).getId() != id) throw new ResponseStatusException(
+        HttpStatus.FORBIDDEN);
+    return service.getAllNotificationsFromUser(id);
+  }
+
+  @DeleteMapping("/users/{id}/notifications")
+  void deleteAllNotificationsFromOneUser(@PathVariable int id, @RequestHeader("Authorization") String token){
+    String emailFromToken = service.verifyToken(token);
+    if(service.getUserByEmail(emailFromToken).getId() != id) throw new ResponseStatusException(
+        HttpStatus.FORBIDDEN);
+    service.deleteAllNotificationsFromUser(id);
+  }
+
   @PostMapping("/trips")
   Trip createOneTrip(@RequestBody NewTrip newTrip){
     return service.createOneTrip(newTrip);
