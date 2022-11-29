@@ -12,4 +12,6 @@ public interface TripsRepository extends CrudRepository<Trip, Long> {
   List<Trip> getTripsByOrderByIdDesc();
 
   Trip getTripsById(int id);
+
+  List<Trip> getTripsByDriverId(int driverId);
 }

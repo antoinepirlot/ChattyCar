@@ -62,4 +62,13 @@ public class TripsService {
       throw new RuntimeException(e);
     }
   }
+
+  /**
+   * get all driver's trips
+   * @param id the driver's id
+   * @return thr list of driver's trips
+   */
+  public List<Trip> getDriverTrips(int id) {
+    return this.repository.getTripsByDriverId(id);
+  }
 }
