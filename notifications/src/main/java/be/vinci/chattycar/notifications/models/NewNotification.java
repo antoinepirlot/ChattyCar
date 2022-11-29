@@ -1,14 +1,12 @@
 package be.vinci.chattycar.notifications.models;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
 public class NewNotification {
 
   private int userId;
