@@ -16,20 +16,13 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Trip {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
-  @Embedded
   private Position origin;
-  @Embedded
   private Position destination;
-  @DateTimeFormat(iso = ISO.DATE)
-  private LocalDate departure;
-  private int driverId;
-  private int availableSeating;
-
+  private String departure_date;
+  private int driver_id;
+  private int available_seating;
 }

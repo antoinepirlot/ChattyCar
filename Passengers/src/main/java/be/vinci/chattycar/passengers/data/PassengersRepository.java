@@ -16,12 +16,11 @@ import java.util.Optional;
 @Repository
 public interface PassengersRepository extends CrudRepository<Passenger, Long> {
 
-  boolean existsByIds(Integer tripId, Integer userId);
-  boolean existsById(Integer tripId);
+  boolean existsByUserIdAndTripId(Integer tripId, Integer userId);
+  boolean existsByTripId(Integer tripId);
+  boolean existsByUserId(Integer userId);
 
-  boolean tripExists(Integer tripId);
-  boolean userExists(Integer userId);
-  Optional<Passenger> findByIds(long tripId, long userId);
+  Optional<Passenger> findByUserIdAndTripId(long tripId, long userId);
 
   Trip getTrip(Integer tripId);
 

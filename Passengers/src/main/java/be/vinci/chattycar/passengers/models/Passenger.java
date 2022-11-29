@@ -23,4 +23,5 @@ public class Passenger {
   private Integer tripId;
   private Integer userId;
   private String status;
+  //private User user;
 }
