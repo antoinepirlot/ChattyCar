@@ -22,11 +22,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "trips")
-public class Trip {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+public class NewTrip {
   @Embedded
   @AttributeOverrides({
       @AttributeOverride(name = "latitude", column = @Column(name = "origin_latitude")),
@@ -44,4 +40,7 @@ public class Trip {
   private int driverId;
   private int availableSeating;
 
+  public Trip toTrip() {
+    return new Trip(0, origin, destination, departure, driverId, availableSeating);
+  }
 }
