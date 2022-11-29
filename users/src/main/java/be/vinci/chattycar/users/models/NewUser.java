@@ -1,7 +1,5 @@
-package be.vinci.chattycar.users;
+package be.vinci.chattycar.users.models;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

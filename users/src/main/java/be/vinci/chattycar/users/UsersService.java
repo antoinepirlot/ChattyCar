@@ -1,5 +1,8 @@
 package be.vinci.chattycar.users;
 
+import be.vinci.chattycar.users.data.UsersRepository;
+import be.vinci.chattycar.users.models.NewUser;
+import be.vinci.chattycar.users.models.User;
 import org.springframework.stereotype.Service;
 
 @Service
