@@ -6,7 +6,7 @@ Content-Type: application/json
   "userId": 1,
   "tripId": 2,
   "date": "2022-10-24",
-  "notificationText" : "Votre demande de voyage a été acceptée2"
+  "notificationText" : "Votre demande de voyage a été acceptée"
 }
 
 ### Read notifications from user

@@ -1,5 +1,6 @@
 package be.vinci.chattycar.notifications.models;
 
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,7 +27,7 @@ public class Notification {
   private int userId;
   @Column(name = "trip_id")
   private int tripId;
-  private String date;
+  private LocalDate date;
   @Column(name = "notification_text")
   private String notificationText;
 
