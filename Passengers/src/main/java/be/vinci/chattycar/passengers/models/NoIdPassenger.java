@@ -15,16 +15,9 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "passenger")
-public class Passenger {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+public class NoIdPassenger {
   private Integer tripId;
   private Integer userId;
   private String status;
-
-  public NoIdPassenger removeId() {
-    return new NoIdPassenger(tripId, userId, status);
-  }
 }
+

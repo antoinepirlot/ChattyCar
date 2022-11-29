@@ -33,7 +33,7 @@ paths:
       responses:
         404:
           description: No trip found with this ID
-        201:
+        202:
           description: Trip's passengers are deleted
 
 
@@ -97,8 +97,6 @@ paths:
       responses:
         400:
           description: User is not a passenger, or is not in pending status, or status not in accepted value
-        404:
-          description: Trip or user not found
         201:
           description: Status is updated
     delete:
@@ -108,8 +106,6 @@ paths:
           description: Used removed from passenger
         400:
           description: User is not a passenger
-        404:
-          description: Trip or user not found
 
   /passengers/user/{user_id}:
       parameters:
@@ -142,6 +138,27 @@ paths:
 components:
   schemas:
     passenger:
+      type: object
+      properties:
+        id:
+          type: integer
+        trip_id:
+          type: integer
+        user_id:
+          type: integer
+        status:
+          type: string
+          enum:
+            - pending
+            - accepted
+            - refused
+      example:
+        id: 1
+        trip_id: 1
+        passenger_id: 1
+        status: accepted
+
+    no_id_passenger:
       type: object
       properties:
         trip_id:

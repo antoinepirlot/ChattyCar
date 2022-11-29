@@ -1,15 +1,10 @@
 package be.vinci.chattycar.passengers.data;
 
 import be.vinci.chattycar.passengers.models.Passenger;
-import be.vinci.chattycar.passengers.models.PassengerTrips;
-import be.vinci.chattycar.passengers.models.Passengers;
-import be.vinci.chattycar.passengers.models.Trip;
-import javax.persistence.criteria.CriteriaBuilder.In;
-import org.springframework.data.jpa.repository.Query;
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.Tuple;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
@@ -22,8 +17,6 @@ public interface PassengersRepository extends CrudRepository<Passenger, Long> {
 
   Optional<Passenger> findByUserIdAndTripId(long tripId, long userId);
 
-  Trip getTrip(Integer tripId);
-
   @Transactional
   void deleteByIds(Integer tripId, Integer userId);
 
@@ -33,8 +26,8 @@ public interface PassengersRepository extends CrudRepository<Passenger, Long> {
   @Transactional
   void deleteByTripId(Integer tripId);
 
-  PassengerTrips findAllTripsByUserId(Integer userId);
+  List<Passenger> getAllPassengersByUserId(Integer userId);
 
-  Passengers findAllPassengersByTripId(Integer tripId);
+  List<Passenger> getAllPassengersByTripId(Integer tripId);
 
 }

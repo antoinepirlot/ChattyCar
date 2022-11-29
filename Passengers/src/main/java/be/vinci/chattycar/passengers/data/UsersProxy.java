@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "users")
 public interface UsersProxy {
   @GetMapping("/users/{id}")
-  User readOne(@PathVariable long id);
+  User readOne(@PathVariable Integer id);
 }
