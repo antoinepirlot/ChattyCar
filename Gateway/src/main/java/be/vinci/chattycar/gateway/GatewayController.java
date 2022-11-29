@@ -99,11 +99,25 @@ public class GatewayController {
     return service.getPassengersOfATripById(id);
   }
 
-  @PostMapping("/trips/{tripId}/passengers/{passenger_id}")
+  @PostMapping("/trips/{tripId}/passengers/{passengerId}")
   void addPassengerToATrip(@PathVariable int tripId, @PathVariable int passengerId){
     service.addPassengerToATrip(tripId, passengerId);
   }
 
+  @GetMapping("/trips/{tripId}/passengers/{passengerId}")
+  String getPassengerStatus(@PathVariable int tripId, @PathVariable int passengerId){
+    return service.getPassengerStatus(tripId, passengerId);
+  }
+
+  @PutMapping("/trips/{trip_id}/passengers/{user_id}")
+  void updatePassengerStatus(@PathVariable("trip_id") int tripId, @PathVariable("user_id") int passengerId,  @RequestParam("status") String status){
+    service.updatePassengerStatus(tripId, passengerId, status);
+  }
+
+  @DeleteMapping("/trips/{trip_id}/passengers/{user_id}")
+  void removePassengerFromTrip(@PathVariable("trip_id") int tripId, @PathVariable("user_id") int passengerId){
+    service.removePassengerFromTrip(tripId, passengerId);
+  }
 
 
 }

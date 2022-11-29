@@ -92,5 +92,19 @@ public class GatewayService {
     notificationProxy.deleteFromUser(id);
   }
 
+  public String getPassengerStatus(int tripId, int userId){
+    return passengersProxy.getPassengerStatus(tripId, userId);
+  }
+
+  public void updatePassengerStatus(int tripId, int userId, String status){
+    passengersProxy.updatePassengerStatus(tripId, userId, status);
+  }
+
+  public void removePassengerFromTrip(int tripId, int userId){
+    passengersProxy.removePassengerFromTrip(tripId, userId);
+  }
+
+
+
 
 }

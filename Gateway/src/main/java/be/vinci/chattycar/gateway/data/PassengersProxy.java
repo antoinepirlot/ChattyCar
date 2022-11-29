@@ -2,7 +2,9 @@ package be.vinci.chattycar.gateway.data;
 
 import be.vinci.chattycar.gateway.models.Passengers;
 import be.vinci.chattycar.gateway.models.Trip;
+import javax.ws.rs.QueryParam;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,12 +14,22 @@ import java.util.List;
 @FeignClient(name = "passengers")
 public interface PassengersProxy {
 
-    @GetMapping("/passengers/{tripId}")
-    List<Passengers> getAllPassengersFromATrip(@PathVariable int tripId);
+    @GetMapping("/passengers/{trip_id}")
+    List<Passengers> getAllPassengersFromATrip(@PathVariable("trip_id") int tripId);
 
-    @PostMapping("/passengers/{tripId}")
-    void addPassengerToATrip(@PathVariable int tripId, @RequestBody Passengers passenger);
+    @PostMapping("/passengers/{trip_id}")
+    void addPassengerToATrip(@PathVariable("trip_id") int tripId, @RequestBody Passengers passenger);
 
     @PutMapping("/passengers/{id}")
     void updatePassenger(@PathVariable int id, @RequestBody Passengers passenger);
+
+    @GetMapping("/passengers/{trip_id}/user/{user_id}")
+    String getPassengerStatus(@PathVariable("trip_id") int tripId, @PathVariable("user_id") int userId);
+
+    @PutMapping("/passengers/{trip_id}/user/{user_id}")
+    ResponseEntity<Void> updatePassengerStatus(@PathVariable("trip_id") int tripId,
+        @PathVariable("user_id") int userId, @RequestParam("status") String status);
+
+    @DeleteMapping("/passengers/{trip_id}/user/{user_id}")
+    void removePassengerFromTrip(@PathVariable("trip_id") int tripId, @PathVariable("user_id") int userId);
 }

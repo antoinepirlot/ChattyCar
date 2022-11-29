@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="EurekaServer" />
         <module name="Users" />
+        <module name="Passengers" />
         <module name="Notifications" />
         <module name="Authentication" />
         <module name="Gateway" />
@@ -19,6 +20,7 @@
       <module name="EurekaServer" target="17" />
       <module name="Gateway" target="17" />
       <module name="Notifications" target="17" />
+      <module name="Passengers" target="17" />
       <module name="Users" target="17" />
     </bytecodeTargetLevel>
   </component>
@@ -28,6 +30,7 @@
       <module name="EurekaServer" options="-parameters" />
       <module name="Gateway" options="-parameters" />
       <module name="Notifications" options="-parameters" />
+      <module name="Passengers" options="-parameters" />
       <module name="Users" options="-parameters" />
     </option>
   </component>
