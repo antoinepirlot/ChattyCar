@@ -56,8 +56,7 @@ public class UsersController {
             user.getLastname() == null || user.getLastname().equals("")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        boolean userFound = service.updateOne(user);
-        if (!userFound) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if (!service.updateOne(user)) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/users/{id}")
