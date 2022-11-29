@@ -75,4 +75,13 @@ public class TripsController {
     }
     this.service.deleteOne(trip);
   }
+
+  @GetMapping("/trips/{id}/driver")
+  public ResponseEntity<List<Trip>> getDriverTrips(@PathVariable int id) {
+    List<Trip> driverTrips = this.service.getDriverTrips(id);
+    if (driverTrips == null || driverTrips.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<>(driverTrips, HttpStatus.ACCEPTED);
+  }
 }

@@ -66,3 +66,9 @@ DELETE http://localhost:9005/trips/1
 
 ###
 DELETE http://localhost:9005/trips/0
+
+### /trips/{id}/driver
+GET http://localhost:9005/trips/12/driver
+
+###
+GET http://localhost:9005/trips/0/driver
