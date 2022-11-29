@@ -109,10 +109,6 @@ paths:
     delete:
       summary: Delete trip
       responses:
-        401:
-          description: Missing authentication
-        403:
-          description: Not identified as the corresponding user
         404:
           description: No trip found with this ID
         200:
@@ -121,9 +117,6 @@ paths:
   /trips/{id}/driver:
     get:
       summary: Get trips where user is the driver with a future departure date
-      security:
-        - authentication:
-            - specific_user
       parameters:
         - name: id
           in: path
@@ -133,10 +126,6 @@ paths:
             example: 1
           description: ID of the user
       responses:
-        401:
-          description: Missing authentication
-        403:
-          description: Not identified as the corresponding user
         404:
           description: No user found with this ID
         200:
@@ -152,8 +141,6 @@ paths:
     get:
       summary: Get trips where user is a passenger with a future departure date by status
       security:
-        - authentication:
-            - specific_user
       parameters:
         - name: id
           in: path
@@ -163,10 +150,6 @@ paths:
             example: 1
           description: ID of the user
       responses:
-        401:
-          description: Missing authentication
-        403:
-          description: Not identified as the corresponding user
         404:
           description: No user found with this ID
         200:
@@ -239,3 +222,19 @@ components:
         departure: 2022-10-24
         driver_id: 12
         available_seating: 2
+        
+    passenger_trips:
+      type: object
+      properties:
+        pending:
+          type: array
+          items:
+            $ref: '#/components/schemas/trip'
+        accepted:
+          type: array
+          items:
+            $ref: '#/components/schemas/trip'
+        refused:
+          type: array
+          items:
+            $ref: '#/components/schemas/trip'
