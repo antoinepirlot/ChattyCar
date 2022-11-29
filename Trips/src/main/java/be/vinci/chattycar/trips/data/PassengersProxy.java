@@ -1,18 +1,14 @@
 package be.vinci.chattycar.trips.data;
 
 import be.vinci.chattycar.trips.models.PassengerTrips;
-import be.vinci.chattycar.trips.models.Position;
-import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@Repository
-@FeignClient(name = "positions")
-public interface PositionsProxy {
+@Repository@FeignClient(name = "passengers")
+public interface PassengersProxy {
 
-  @GetMapping("/positions/{id}")
-  Position readOne(@PathVariable int id);
-
+  @GetMapping("/passengers/tripId/{tripId}")
+  PassengerTrips readPassengerTrips(@PathVariable int tripId);
 }

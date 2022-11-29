@@ -1,22 +1,28 @@
 package be.vinci.chattycar.trips;
 
+import be.vinci.chattycar.trips.data.PassengersProxy;
 import be.vinci.chattycar.trips.data.PositionsProxy;
 import be.vinci.chattycar.trips.data.TripsRepository;
 import be.vinci.chattycar.trips.models.NewTrip;
+import be.vinci.chattycar.trips.models.PassengerTrips;
 import be.vinci.chattycar.trips.models.Trip;
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class TripsService {
 
   private final TripsRepository repository;
   private final PositionsProxy positionsProxy;
+  private final PassengersProxy passengersProxy;
 
-  public TripsService(TripsRepository repository, PositionsProxy positionsProxy) {
+  public TripsService(TripsRepository repository, PositionsProxy positionsProxy, PassengersProxy passengersProxy) {
     this.repository = repository;
     this.positionsProxy = positionsProxy;
+    this.passengersProxy = passengersProxy;
   }
 
   public Trip createOne(NewTrip newTrip) {
@@ -70,5 +76,27 @@ public class TripsService {
    */
   public List<Trip> getDriverTrips(int id) {
     return this.repository.getTripsByDriverId(id);
+  }
+
+  /**
+   * Get all future passenger's trips
+   * @param id the passengerId
+   * @return the list of future passenger's trips
+   */
+  public PassengerTrips getFuturePassengerTrips(int id) {
+    PassengerTrips passengerTrips = this.passengersProxy.readPassengerTrips(id);
+    if (passengerTrips == null) {
+      return null;
+    }
+    passengerTrips.setAccepted(passengerTrips.getAccepted().stream()
+        .filter(p -> p.getDeparture().isAfter(LocalDate.now()))
+        .toList());
+    passengerTrips.setRefused(passengerTrips.getRefused().stream()
+        .filter(p -> p.getDeparture().isAfter(LocalDate.now()))
+        .toList());
+    passengerTrips.setPending(passengerTrips.getPending().stream()
+        .filter(p -> p.getDeparture().isAfter(LocalDate.now()))
+        .toList());
+    return passengerTrips;
   }
 }

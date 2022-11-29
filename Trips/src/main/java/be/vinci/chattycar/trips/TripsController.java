@@ -1,6 +1,7 @@
 package be.vinci.chattycar.trips;
 
 import be.vinci.chattycar.trips.models.NewTrip;
+import be.vinci.chattycar.trips.models.PassengerTrips;
 import be.vinci.chattycar.trips.models.Trip;
 import java.time.LocalDate;
 import java.util.List;
@@ -83,5 +84,14 @@ public class TripsController {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<>(driverTrips, HttpStatus.ACCEPTED);
+  }
+
+  @GetMapping("/trips/{id}/passenger")
+  public ResponseEntity<PassengerTrips> getFuturePassengerTrips(@PathVariable int id) {
+    PassengerTrips futurePassengerTrips = this.service.getFuturePassengerTrips(id);
+    if (futurePassengerTrips == null) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<>(futurePassengerTrips, HttpStatus.ACCEPTED);
   }
 }
