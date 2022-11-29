@@ -1,5 +1,6 @@
 package be.vinci.chattycar.notifications.data;
 
+import be.vinci.chattycar.notifications.models.Trip;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
