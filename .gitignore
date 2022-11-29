@@ -23,10 +23,8 @@ HELP.md
 .settings
 .springBeans
 .sts4-cache
-*.properties
 
 ### IntelliJ IDEA ###
-.idea
 *.iws
 *.ipr
 
@@ -42,3 +40,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+.idea
+*.iml

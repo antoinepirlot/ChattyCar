@@ -1,0 +1,16 @@
+### Create notification
+POST http://localhost:9004/notifications
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "tripId": 38,
+  "date": "2022-10-24",
+  "notificationText" : "Votre demande de voyage a été acceptée2"
+}
+
+### Read notifications from user
+GET http://localhost:9004/notifications/users/1
+
+### Delete notifications from user
+DELETE http://localhost:9004/notifications/users/1
