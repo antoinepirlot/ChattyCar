@@ -1,5 +1,8 @@
 package be.vinci.chattycar.users;
 
+import be.vinci.chattycar.users.data.UsersRepository;
+import be.vinci.chattycar.users.models.NewUser;
+import be.vinci.chattycar.users.models.User;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +16,7 @@ public class UsersService {
   /**
    * Creates a user
    * @param newUser User to create
-   * @return used created if the user could be created, null if another user exists with this pseudo
+   * @return user created if the user could be created, null if another user exists with this email
    */
   public User createOne(NewUser newUser) {
     if (repository.existsByEmail(newUser.getEmail())) return null;

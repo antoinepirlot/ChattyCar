@@ -28,21 +28,16 @@ public class NotificationsController {
         newNotification.getTripId()<1 || newNotification.getUserId()<1) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
-    Notification notificationCreated =service.createOne(newNotification);
-    if(notificationCreated==null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     return new ResponseEntity<>(service.createOne(newNotification), HttpStatus.CREATED);
   }
 
-  @GetMapping("/notifications/users/{id}")
+  @GetMapping("/notifications/user/{id}")
   public Iterable<Notification> readFromUser(@PathVariable int id) {
-    Iterable<Notification> notifications = service.readNotificationsFromUserId(id);
-    if(notifications == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-    return notifications;
+    return service.readNotificationsFromUserId(id);
   }
 
-  @DeleteMapping("/notifications/users/{id}")
+  @DeleteMapping("/notifications/user/{id}")
   public void deleteFromUser(@PathVariable int id) {
-    if(!service.deleteNotificationsFromUserId(id))
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    service.deleteNotificationsFromUserId(id);
   }
 }

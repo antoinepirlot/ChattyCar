@@ -1,5 +1,7 @@
 package be.vinci.chattycar.users;
 
+import be.vinci.chattycar.users.models.NewUser;
+import be.vinci.chattycar.users.models.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

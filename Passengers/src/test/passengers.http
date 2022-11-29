@@ -1,0 +1,8 @@
+### Create passenger
+POST http://localhost:9004/passengers/
+Content-Type: application/json
+
+{
+  "email": "zoe@gmail.com",
+  "password": "azerty"
+}

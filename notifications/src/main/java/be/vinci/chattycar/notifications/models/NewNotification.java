@@ -1,19 +1,21 @@
 package be.vinci.chattycar.notifications.models;
 
+import java.time.LocalDate;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
 public class NewNotification {
 
   private int userId;
   private int tripId;
-  private String date;
+  @DateTimeFormat(iso = ISO.DATE)
+  private LocalDate date;
   private String notificationText;
 
   public Notification toNotification() {

@@ -1,0 +1,74 @@
+POST http://localhost:9005/trips
+Content-Type: application/json
+
+{
+  "origin": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "destination": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "departure": "2022-10-24",
+  "driverId": 12,
+  "availableSeating": 2
+}
+
+###
+POST http://localhost:9005/trips
+Content-Type: application/json
+
+{
+  "origin": {
+    "latitude": 50.254789,
+    "longitude": 54.253698
+  },
+  "destination": {
+    "latitude": 54.369874,
+    "longitude": 10.256987
+  },
+  "departure": "2022-12-05",
+  "driverId": 2,
+  "availableSeating": 25
+}
+
+###
+POST http://localhost:9005/trips
+Content-Type: application/json
+
+{
+  "origin": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "destination": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "departure": "2022-10-25",
+  "driverId": 12,
+  "availableSeating": 4
+}
+
+###
+GET http://localhost:9005/trips?departureDate=2022-12-05&originLat=5&originLon=5&destinationLat=5&destinationLon=5
+
+### /trips/{id}
+### GET
+GET http://localhost:9005/trips/1
+
+###
+GET http://localhost:9005/trips/0
+
+### DELETE
+DELETE http://localhost:9005/trips/1
+
+###
+DELETE http://localhost:9005/trips/0
+
+### /trips/{id}/driver
+GET http://localhost:9005/trips/12/driver
+
+###
+GET http://localhost:9005/trips/0/driver
