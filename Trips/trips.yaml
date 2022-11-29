@@ -117,133 +117,64 @@ paths:
           description: No trip found with this ID
         200:
           description: Trip is deleted
-  /trips/{id}/passengers:
+          
+  /trips/{id}/driver:
     get:
-      summary: Get list of passengers of a trip, with pending, accepted and refused status
+      summary: Get trips where user is the driver with a future departure date
       security:
         - authentication:
-            - driver
+            - specific_user
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: integer
-            example: 38
-          description: ID of the trip
+            example: 1
+          description: ID of the user
       responses:
-        400:
-          description: Status not in accepted values
         401:
           description: Missing authentication
         403:
           description: Not identified as the corresponding user
         404:
-          description: No trip found with this ID
+          description: No user found with this ID
         200:
-          description: Sent list of passengers
+          description: Sent user driver trips
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/passengers'
+                type: array
+                items:
+                  $ref: "#/components/schemas/trip"
 
-  /trips/{trip_id}/passengers/{user_id}:
-    parameters:
-      - name: trip_id
-        in: path
-        required: true
-        schema:
-          type: integer
-          example: 38
-        description: ID of the trip
-      - name: user_id
-        in: path
-        required: true
-        schema:
-          type: integer
-          example: 12
-        description: ID of the user
-    post:
-      summary: Add user as passenger to a trip with pending status
-      security:
-        - authentication:
-            - passenger
-      responses:
-        400:
-          description: User is already a passenger, or the ride has no available seating left
-        401:
-          description: Missing authentication
-        403:
-          description: Not identified as the corresponding user
-        404:
-          description: Trip or user not found
-        201:
-          description: User added as pending passenger
+  /trips/{id}/passenger:
     get:
-      summary: Get passenger status
+      summary: Get trips where user is a passenger with a future departure date by status
       security:
         - authentication:
-            - driver
-            - passenger
-      responses:
-        401:
-          description: Missing authentication
-        403:
-          description: Not identified as the corresponding user
-        404:
-          description: Trip or user not found
-        200:
-          description: Sent passenger status
-          content:
-            'text/plain':
-              schema:
-                type: string
-                enum:
-                  - pending
-                  - accepted
-                  - refused
-    put:
-      summary: Update passenger status
-      security:
-        - authentication:
-            - driver
+            - specific_user
       parameters:
-        - name: status
-          in: query
+        - name: id
+          in: path
           required: true
           schema:
-            type: string
-            enum:
-              - accepted
-              - refused
-          description: New status of the passenger
+            type: integer
+            example: 1
+          description: ID of the user
       responses:
-        400:
-          description: User is not a passenger, or is not in pending status, or status not in accepted 				value
         401:
           description: Missing authentication
         403:
           description: Not identified as the corresponding user
         404:
-          description: Trip or user not found
+          description: No user found with this ID
         200:
-          description: Status is updated
-    delete:
-      summary: Remove user from passengers of a trip
-      security:
-        - authentication:
-            - passenger
-      responses:
-        400:
-          description: User is not a passenger
-        401:
-          description: Missing authentication
-        403:
-          description: Not identified as the corresponding user
-        404:
-          description: Trip or user not found
-        200:
-          description: Used removed from passenger
+          description: Sent user passenger trips
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/passenger_trips"
 
 components:
   schemas:
