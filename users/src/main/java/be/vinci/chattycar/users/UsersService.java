@@ -16,7 +16,7 @@ public class UsersService {
   /**
    * Creates a user
    * @param newUser User to create
-   * @return used created if the user could be created, null if another user exists with this pseudo
+   * @return user created if the user could be created, null if another user exists with this email
    */
   public User createOne(NewUser newUser) {
     if (repository.existsByEmail(newUser.getEmail())) return null;
