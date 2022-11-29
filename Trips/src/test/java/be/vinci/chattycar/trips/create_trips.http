@@ -10,9 +10,9 @@ Content-Type: application/json
     "latitude": 50.849372,
     "longitude": 4.451009
   },
-  "departure": "2022-10-24",
-  "driverId": 12,
-  "availableSeating": 2
+  "departure": "2022-10-25",
+  "driver_id": 12,
+  "available_seating": 2
 }
 
 ###
@@ -29,8 +29,8 @@ Content-Type: application/json
     "longitude": 10.256987
   },
   "departure": "2022-12-05",
-  "driverId": 2,
-  "availableSeating": 25
+  "driver_id": 2,
+  "available_seating": 25
 }
 
 ###
@@ -47,28 +47,25 @@ Content-Type: application/json
     "longitude": 4.451009
   },
   "departure": "2022-10-25",
-  "driverId": 12,
-  "availableSeating": 4
+  "driver_id": 13,
+  "available_seating": 4
 }
 
 ###
-GET http://localhost:9005/trips?departureDate=2022-12-05&originLat=5&originLon=5&destinationLat=5&destinationLon=5
 
-### /trips/{id}
-### GET
-GET http://localhost:9005/trips/1
+POST http://localhost:9005/trips
+Content-Type: application/json
 
-###
-GET http://localhost:9005/trips/0
-
-### DELETE
-DELETE http://localhost:9005/trips/1
-
-###
-DELETE http://localhost:9005/trips/0
-
-### /trips/{id}/driver
-GET http://localhost:9005/trips/12/driver
-
-###
-GET http://localhost:9005/trips/0/driver
+{
+  "origin": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "destination": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "departure": "2022-10-25",
+  "driver_id": 14,
+  "available_seating": 4
+}
