@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface TripsRepository extends CrudRepository<Trip, Long> {
   boolean existsByDriverIdAndDeparture(int driverId, LocalDate departure);
   List<Trip> getTripsByOrderByIdDesc();
+
+  Trip getTripsById(int id);
 }

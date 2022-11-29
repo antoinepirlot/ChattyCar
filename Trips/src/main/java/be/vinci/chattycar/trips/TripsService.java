@@ -41,4 +41,13 @@ public class TripsService {
     //TODO calcul distance avec positions qui calcule la distance
     return trips;
   }
+
+  /**
+   * Get one trip identified by its id
+   * @param id the trip's id
+   * @return the trip matching with the id
+   */
+  public Trip getOneById(int id) {
+    return this.repository.getTripsById(id);
+  }
 }

@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,5 +55,14 @@ public class TripsController {
       throw new ResponseStatusException(HttpStatus.CONFLICT);
     }
     return new ResponseEntity<>(createdTrip, HttpStatus.CREATED);
+  }
+
+  @GetMapping("/trips/{id}")
+  public ResponseEntity<Trip> getOneById(@PathVariable int id) {
+    Trip trip = this.service.getOneById(id);
+    if (trip == null) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<>(trip, HttpStatus.ACCEPTED);
   }
 }

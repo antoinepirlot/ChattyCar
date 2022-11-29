@@ -53,3 +53,9 @@ Content-Type: application/json
 
 ###
 GET http://localhost:9005/trips?departureDate=2022-12-05&originLat=5&originLon=5&destinationLat=5&destinationLon=5
+
+### /trips/{id}
+GET http://localhost:9005/trips/1
+
+###
+GET http://localhost:9005/trips/0
