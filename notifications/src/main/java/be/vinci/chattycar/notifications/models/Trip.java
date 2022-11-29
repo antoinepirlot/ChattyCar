@@ -16,8 +16,6 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
-@AllArgsConstructor
 public class Trip {
   @Embedded
   @AttributeOverrides({
