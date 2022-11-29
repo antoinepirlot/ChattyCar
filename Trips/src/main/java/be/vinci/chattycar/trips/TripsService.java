@@ -8,9 +8,7 @@ import be.vinci.chattycar.trips.models.PassengerTrips;
 import be.vinci.chattycar.trips.models.Trip;
 import java.time.LocalDate;
 import java.util.List;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class TripsService {
