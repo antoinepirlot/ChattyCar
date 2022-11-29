@@ -14,16 +14,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "newTrips")
-public class NewTrip {
+@Entity(name = "trips")
+public class Trip {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
@@ -39,12 +37,8 @@ public class NewTrip {
       @AttributeOverride(name = "longitude", column = @Column(name = "destination_longitude")),
   })
   private Position destination;
-  @DateTimeFormat(iso = ISO.DATE)
   private LocalDate departure;
   private int driverId;
   private int availableSeating;
 
-  public Trip toTrip() {
-    return new Trip(0, origin, destination, departure, driverId, availableSeating);
-  }
 }
