@@ -31,12 +31,12 @@ public class NotificationsController {
     return new ResponseEntity<>(service.createOne(newNotification), HttpStatus.CREATED);
   }
 
-  @GetMapping("/notifications/users/{id}")
+  @GetMapping("/notifications/user/{id}")
   public Iterable<Notification> readFromUser(@PathVariable int id) {
     return service.readNotificationsFromUserId(id);
   }
 
-  @DeleteMapping("/notifications/users/{id}")
+  @DeleteMapping("/notifications/user/{id}")
   public void deleteFromUser(@PathVariable int id) {
     service.deleteNotificationsFromUserId(id);
   }

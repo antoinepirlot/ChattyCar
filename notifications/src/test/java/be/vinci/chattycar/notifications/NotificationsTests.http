@@ -10,7 +10,7 @@ Content-Type: application/json
 }
 
 ### Read notifications from user
-GET http://localhost:9004/notifications/users/1
+GET http://localhost:9004/notifications/user/1
 
 ### Delete notifications from user
-DELETE http://localhost:9004/notifications/users/1
+DELETE http://localhost:9004/notifications/user/1
