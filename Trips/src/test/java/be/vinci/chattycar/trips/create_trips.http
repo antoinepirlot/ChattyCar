@@ -69,3 +69,21 @@ Content-Type: application/json
   "driver_id": 14,
   "available_seating": 4
 }
+
+###
+POST http://localhost:9005/trips
+Content-Type: application/json
+
+{
+  "origin": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "destination": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "departure": "2022-10-25",
+  "driver_id": 5,
+  "available_seating": 0
+}
