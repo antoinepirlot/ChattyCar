@@ -3,8 +3,8 @@ Content-Type: application/json
 
 {
   "origin": {
-    "latitude": 50.849372,
-    "longitude": 4.451009
+    "latitude": 52.142598,
+    "longitude": 8.548796
   },
   "destination": {
     "latitude": 50.849372,
@@ -39,8 +39,8 @@ Content-Type: application/json
 
 {
   "origin": {
-    "latitude": 50.849372,
-    "longitude": 4.451009
+    "latitude": 52.142598,
+    "longitude": 8.548796
   },
   "destination": {
     "latitude": 50.849372,
@@ -76,8 +76,8 @@ Content-Type: application/json
 
 {
   "origin": {
-    "latitude": 50.849372,
-    "longitude": 4.451009
+    "latitude": 51.854769,
+    "longitude": 20.524789
   },
   "destination": {
     "latitude": 50.849372,
