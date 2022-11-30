@@ -1,5 +1,6 @@
 package be.vinci.chattycar.trips.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -38,7 +39,9 @@ public class Trip {
   })
   private Position destination;
   private LocalDate departure;
+  @JsonProperty("driver_id")
   private int driverId;
+  @JsonProperty("available_seating")
   private int availableSeating;
 
 }
