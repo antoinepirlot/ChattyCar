@@ -35,35 +35,40 @@ public class TripsController {
       @RequestParam(required = false) Double destinationLat,
       @RequestParam(required = false) Double destinationLon
   ) {
+    if ((originLon == null && originLat != null || originLon != null && originLat == null)
+        || (destinationLon == null && destinationLat != null || destinationLon != null && destinationLat == null)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    }
     List<Trip> trips = null;
     if(departureDate == null) {
-      if (originLat == null && originLon == null) {
-        if (destinationLon == null && destinationLat == null) {
+      if (originLat == null) {
+        if (destinationLat == null) {
           //No departure date & No origin & no destination
           trips = this.service.getAll();
-        } else if (destinationLon != null && destinationLat != null) {
+        } else {
           // No departure date & no origin & destination
           trips = this.service.getAll(destinationLon, destinationLat, false);
         }
-      } else if (originLat != null && originLon != null) {
-        if (destinationLon == null && destinationLat == null) {
+      } else {
+        if (destinationLat == null) {
           //No departure date & origin & no destination
           trips = this.service.getAll(originLon, originLat, true);
-        } else if (destinationLon != null && destinationLat != null) {
-          //TODO
+        } else {
+          //No departure date & origin & destination
+          trips = this.service.getAll(originLon, originLat, destinationLon, destinationLat);
         }
       }
     } else {
-      if (originLat == null && originLon == null) {
-        if (destinationLon == null && destinationLat == null) {
+      if (originLat == null) {
+        if (destinationLat == null) {
           //TODO
-        } else if (destinationLon != null && destinationLat != null) {
+        } else {
           //TODO
         }
-      } else if (originLat != null && originLon != null) {
-        if (destinationLon == null && destinationLat == null) {
+      } else {
+        if (destinationLat == null) {
           //TODO
-        } else if (destinationLon != null && destinationLat != null) {
+        } else {
           //TODO
         }
       }
