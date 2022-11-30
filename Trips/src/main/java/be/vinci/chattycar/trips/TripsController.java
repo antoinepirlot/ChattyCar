@@ -64,11 +64,12 @@ public class TripsController {
           trips = this.service.getAll(departureDate);
         } else {
           //Departure date & no origin & destination
-          trips = this.service.getAll(departureDate, destinationLon, destinationLat);
+          trips = this.service.getAll(departureDate, destinationLon, destinationLat, false);
         }
       } else {
         if (destinationLat == null) {
-          //TODO
+          //Departure date & origin & no destination
+          trips = this.service.getAll(departureDate, originLon, originLat, true);
         } else {
           //TODO
         }

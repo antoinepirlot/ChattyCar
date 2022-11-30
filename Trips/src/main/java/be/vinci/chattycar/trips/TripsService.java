@@ -86,17 +86,21 @@ public class TripsService {
   }
 
   /**
-   * Get all trips at the departure date with specified destination position
+   * Get all trips at the departure date with specified position
    * @param departureDate the departure date
-   * @param destinationLon the destination longitude
-   * @param destinationLat the destination latitude
+   * @param longitude the destination longitude
+   * @param latitude the destination latitude
+   * @param origin true if position is origin,false if the position is destination
    * @return the list of trips matching params
    */
-  public List<Trip> getAll(LocalDate departureDate, double destinationLon, double destinationLat) {
-    Position destination = new Position();
-    destination.setLongitude(destinationLon);
-    destination.setLatitude(destinationLat);
-    return this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndDestinationEqualsOrderByIdDesc(0, departureDate, destination);
+  public List<Trip> getAll(LocalDate departureDate, double longitude, double latitude, boolean origin) {
+    Position position = new Position();
+    position.setLongitude(longitude);
+    position.setLatitude(latitude);
+    if (origin) {
+      return this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndOriginEqualsOrderByIdDesc(0, departureDate, position);
+    }
+    return this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndDestinationEqualsOrderByIdDesc(0, departureDate, position);
   }
 
   /**
