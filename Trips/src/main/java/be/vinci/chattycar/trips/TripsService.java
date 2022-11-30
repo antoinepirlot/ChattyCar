@@ -52,8 +52,7 @@ public class TripsService {
     Position destination = new Position();
     destination.setLongitude(destinationLon);
     destination.setLatitude(destinationLat);
-    trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDestinationEqualsOrderByIdDesc(0, destination);
-    return trips;
+    return this.repository.getTripsByAvailableSeatingGreaterThanAndDestinationEqualsOrderByIdDesc(0, destination);
   }
 
   /**
