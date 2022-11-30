@@ -77,6 +77,15 @@ public class TripsService {
   }
 
   /**
+   * Get all trips at the departure date
+   * @param departureDate
+   * @return
+   */
+  public List<Trip> getAll(LocalDate departureDate) {
+    return this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsOrderByIdDesc(0, departureDate);
+  }
+
+  /**
    * Get distance from Positions service
    * @param position
    * @return
