@@ -6,7 +6,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@Repository@FeignClient(name = "passengers")
+@Repository
+@FeignClient(name = "passengers")
 public interface PassengersProxy {
 
   @GetMapping("/passengers/tripId/{tripId}")
