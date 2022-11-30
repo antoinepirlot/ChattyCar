@@ -76,12 +76,12 @@ public class GatewayService {
     tripsProxy.deleteOne(id);
   }
 
-  public List<Passengers> getPassengersOfATripById(int id){
+  public Passengers getPassengersOfATripById(int id){
     return passengersProxy.getAllPassengersFromATrip(id);
   }
 
-  public void addPassengerToATrip(int tripId, int passengerId){
-    passengersProxy.addPassengerToATrip(tripId, new Passengers(passengerId, passengerId, "pending")); //TODO : changer id ??
+  public NoIdPassenger addPassengerToATrip(int tripId, int passengerId){
+    return passengersProxy.addPassengerToATrip(tripId, passengerId).getBody();
   }
 
   public Iterable<Notification> getAllNotificationsFromUser(int id){
@@ -102,6 +102,10 @@ public class GatewayService {
 
   public void removePassengerFromTrip(int tripId, int userId){
     passengersProxy.removePassengerFromTrip(tripId, userId);
+  }
+
+  public Notification createNotification(NewNotification newNotification){
+    return notificationProxy.createOne(newNotification).getBody();
   }
 
 

@@ -1,0 +1,106 @@
+//////////////////
+// Set up users //
+//////////////////
+
+### Create user nico
+POST http://localhost:9000/users
+Content-Type: application/json
+
+{
+  "email": "nico@gmail.com",
+  "firstname": "nicolas",
+  "lastname": "poppe",
+  "password": "password123"
+}
+
+### Create user zoe
+POST http://localhost:9000/users
+Content-Type: application/json
+
+{
+  "email": "zoe@gmail.com",
+  "firstname": "zoe",
+  "lastname": "levaux",
+  "password": "123password321"
+}
+
+### Connect user nico
+POST http://localhost:9000/auth
+Content-Type: application/json
+
+{
+  "email": "nico@gmail.com",
+  "password": "password123"
+}
+
+> {%
+ client.global.set("userToken", response.body);
+ %}
+
+### Connect user zoe
+POST http://localhost:9000/auth
+Content-Type: application/json
+
+{
+  "email": "zoe@gmail.com",
+  "password": "123password321"
+}
+
+> {%
+ client.global.set("userTokenZoe", response.body);
+ %}
+
+###
+//////////////////
+// Set up trips //
+//////////////////
+
+### Create a trip : nico creates a trip
+POST http://localhost:9000/trips
+Content-Type: application/json
+Authorization: {{userToken}}
+
+{
+  "origin": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "destination": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "departure": "2023-10-28",
+  "driver_id": 1,
+  "available_seating": 1
+}
+
+###
+
+//////////////////////////////
+// Operations on passengers //
+//////////////////////////////
+
+### Add passenger to a trip : Add zoe as passenger to nico's trip
+POST http://localhost:9000/trips/1/passengers/2
+Authorization: {{userTokenZoe}}
+
+### Get all passengers : passengers from nico's trip
+GET http://localhost:9000/trips/1/passengers
+Authorization: {{userToken}}
+
+
+/////////////////////////////////
+// Operations on notifications //
+/////////////////////////////////
+
+### Get all notifications : nico's notifications
+GET http://localhost:9000/users/1/notifications
+Authorization: {{userToken}}
+
+### Delete all notifications : delete nico's notifications
+DELETE http://localhost:9000/users/1/notifications
+Authorization: {{userToken}}
+
+### Get all notifications : nico has 0 notification
+GET http://localhost:9000/users/1/notifications
+Authorization: {{userToken}}

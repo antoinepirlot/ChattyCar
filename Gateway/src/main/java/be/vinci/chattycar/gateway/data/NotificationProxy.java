@@ -1,19 +1,22 @@
 package be.vinci.chattycar.gateway.data;
 
+import be.vinci.chattycar.gateway.models.NewNotification;
 import be.vinci.chattycar.gateway.models.Notification;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 @Repository
-@FeignClient(name = "notification")
+@FeignClient(name = "notifications")
 public interface NotificationProxy {
 
-  @GetMapping("/notifications/users/{id}")
+  @PostMapping("/notifications")
+  ResponseEntity<Notification> createOne(@RequestBody NewNotification newNotification);
+
+  @GetMapping("/notifications/user/{id}")
   Iterable<Notification> readFromUser(@PathVariable int id);
 
-  @DeleteMapping("/notifications/users/{id}")
+  @DeleteMapping("/notifications/user/{id}")
   void deleteFromUser(@PathVariable int id);
 }

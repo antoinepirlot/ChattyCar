@@ -5,13 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Passengers {
-    private int userId;
-    private int passengerId;
-    private String status;
-
+    private List<User> pending;
+    private List<User> accepted;
+    private List<User> refused;
 }

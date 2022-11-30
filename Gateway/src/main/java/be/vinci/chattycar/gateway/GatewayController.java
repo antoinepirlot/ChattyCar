@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @CrossOrigin(origins = { "http://localhost:80" })
@@ -56,8 +57,6 @@ public class GatewayController {
     service.updateUser(user);
   }
 
-  //TODO : en dessous, il faut tester
-
   @DeleteMapping("/users/{id}")
   void deleteOneUser(@PathVariable int id, @RequestHeader("Authorization") String token){
     String emailFromToken = service.verifyToken(token);
@@ -69,8 +68,6 @@ public class GatewayController {
 
     service.deleteUser(id);
   }
-
-
 
   @GetMapping("/users/{id}/notifications")
   Iterable<Notification> getNotificationsFromOneUser(@PathVariable int id, @RequestHeader("Authorization") String token){
@@ -111,13 +108,28 @@ public class GatewayController {
   }
 
   @GetMapping("/trips/{id}/passengers")
-  List<Passengers> getPassengersOfATripById(@PathVariable int id){
+  Passengers getPassengersOfATripById(@PathVariable int id){
+    service.getTripById(id);
     return service.getPassengersOfATripById(id);
   }
 
-  @PostMapping("/trips/{tripId}/passengers/{passengerId}")
-  void addPassengerToATrip(@PathVariable int tripId, @PathVariable int passengerId){
-    service.addPassengerToATrip(tripId, passengerId);
+  @PostMapping("/trips/{trip_id}/passengers/{passenger_id}")
+  NoIdPassenger addPassengerToATrip(@PathVariable("trip_id") int tripId, @PathVariable("passenger_id") int passengerId,
+                           @RequestHeader("Authorization") String token){
+    String email = service.verifyToken(token);
+    System.out.println(12);
+    service.getUserById(passengerId);
+    System.out.println(12);
+    User user = service.getUserByEmail(email);
+    System.out.println(12);
+    if(passengerId != user.getId()) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    System.out.println(12);
+    Trip trip = service.getTripById(tripId);
+    System.out.println(12);
+    String notifMessage = user.getFirstname() + " " + user.getLastname() + " veut rejoindre votre voyage";
+    service.createNotification(new NewNotification(trip.getDriverId(), tripId, LocalDate.now(), notifMessage));
+    System.out.println(12);
+    return service.addPassengerToATrip(tripId, passengerId);
   }
 
   @GetMapping("/trips/{tripId}/passengers/{passengerId}")

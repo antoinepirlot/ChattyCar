@@ -1,5 +1,6 @@
 package be.vinci.chattycar.gateway.data;
 
+import be.vinci.chattycar.gateway.models.NoIdPassenger;
 import be.vinci.chattycar.gateway.models.Passengers;
 import be.vinci.chattycar.gateway.models.Trip;
 import javax.ws.rs.QueryParam;
@@ -15,10 +16,10 @@ import java.util.List;
 public interface PassengersProxy {
 
     @GetMapping("/passengers/{trip_id}")
-    List<Passengers> getAllPassengersFromATrip(@PathVariable("trip_id") int tripId);
+    Passengers getAllPassengersFromATrip(@PathVariable("trip_id") Integer tripId);
 
-    @PostMapping("/passengers/{trip_id}")
-    void addPassengerToATrip(@PathVariable("trip_id") int tripId, @RequestBody Passengers passenger);
+    @PostMapping("/passengers/{trip_id}/user/{user_id}")
+    ResponseEntity<NoIdPassenger> addPassengerToATrip(@PathVariable("trip_id") int tripId, @PathVariable("user_id") int userId );
 
     @PutMapping("/passengers/{id}")
     void updatePassenger(@PathVariable int id, @RequestBody Passengers passenger);
