@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Repository
 @FeignClient(name = "trips")
 public interface TripsProxy {
@@ -20,4 +22,8 @@ public interface TripsProxy {
 
     @DeleteMapping("/trips/{id}")
     void deleteOne(@PathVariable int id);
+
+    @GetMapping("/trips/{id}/driver")
+    List<Trip> getDriverTrips(@PathVariable int id);
+
 }

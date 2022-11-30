@@ -126,7 +126,7 @@ Authorization: {{userToken}}
     "latitude": 50.849372,
     "longitude": 4.451009
   },
-  "departure": "2023-10-28",
+  "departure": "2024-10-28",
   "driver_id": 1,
   "available_seating": 3
 }
@@ -148,6 +148,13 @@ GET http://localhost:9000/trips/1
 
 ### Get trip by id : valid id and connected => 200
 GET http://localhost:9000/trips/1
+Authorization: {{userToken}}
+
+//////////////////////
+// Get driver trips //
+//////////////////////
+###
+GET http://localhost:9000/users/1/driver
 Authorization: {{userToken}}
 
 ///////////////////

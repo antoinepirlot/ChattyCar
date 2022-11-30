@@ -69,6 +69,14 @@ public class GatewayController {
     service.deleteUser(id);
   }
 
+  @GetMapping("/users/{id}/driver")
+  List<Trip> getDriverTrips(@PathVariable int id, @RequestHeader("Authorization") String token){
+    service.verifyToken(token);
+    User user = service.getUserById(id);
+    if(user.getId() != id) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    return service.getDriverTrips(id);
+  }
+
   @GetMapping("/users/{id}/notifications")
   Iterable<Notification> getNotificationsFromOneUser(@PathVariable int id, @RequestHeader("Authorization") String token){
     String emailFromToken = service.verifyToken(token);
@@ -117,33 +125,38 @@ public class GatewayController {
   NoIdPassenger addPassengerToATrip(@PathVariable("trip_id") int tripId, @PathVariable("passenger_id") int passengerId,
                            @RequestHeader("Authorization") String token){
     String email = service.verifyToken(token);
-    System.out.println(12);
     service.getUserById(passengerId);
-    System.out.println(12);
     User user = service.getUserByEmail(email);
-    System.out.println(12);
     if(passengerId != user.getId()) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-    System.out.println(12);
     Trip trip = service.getTripById(tripId);
-    System.out.println(12);
     String notifMessage = user.getFirstname() + " " + user.getLastname() + " veut rejoindre votre voyage";
     service.createNotification(new NewNotification(trip.getDriverId(), tripId, LocalDate.now(), notifMessage));
-    System.out.println(12);
     return service.addPassengerToATrip(tripId, passengerId);
   }
 
   @GetMapping("/trips/{tripId}/passengers/{passengerId}")
-  String getPassengerStatus(@PathVariable int tripId, @PathVariable int passengerId){
+  String getPassengerStatus(@PathVariable int tripId, @PathVariable int passengerId,
+                            @RequestHeader("Authorization") String token){
+    //TODO : verify if it is the good one who's connected
+    service.verifyToken(token);
+    service.getTripById(tripId);
+    service.getUserById(passengerId);
     return service.getPassengerStatus(tripId, passengerId);
   }
 
   @PutMapping("/trips/{trip_id}/passengers/{user_id}")
-  void updatePassengerStatus(@PathVariable("trip_id") int tripId, @PathVariable("user_id") int passengerId,  @RequestParam("status") String status){
+  void updatePassengerStatus(@PathVariable("trip_id") int tripId, @PathVariable("user_id") int passengerId,
+                             @RequestParam("status") String status, @RequestHeader("Authorization") String token){
+    String email = service.verifyToken(token);
+    if(!status.equals("accepted") && !status.equals("refused")) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    Trip trip = service.getTripById(tripId);
+    if(service.getUserByEmail(email).getId() != trip.getDriverId()) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     service.updatePassengerStatus(tripId, passengerId, status);
   }
 
   @DeleteMapping("/trips/{trip_id}/passengers/{user_id}")
-  void removePassengerFromTrip(@PathVariable("trip_id") int tripId, @PathVariable("user_id") int passengerId){
+  void removePassengerFromTrip(@PathVariable("trip_id") int tripId, @PathVariable("user_id") int passengerId,
+                               @RequestHeader("Authorization") String token){
     service.removePassengerFromTrip(tripId, passengerId);
   }
 

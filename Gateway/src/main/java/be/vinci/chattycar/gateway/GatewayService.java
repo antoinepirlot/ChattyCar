@@ -108,6 +108,9 @@ public class GatewayService {
     return notificationProxy.createOne(newNotification).getBody();
   }
 
+  public List<Trip> getDriverTrips(int id){
+    return tripsProxy.getDriverTrips(id);
+  }
 
 
 
