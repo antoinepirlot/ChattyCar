@@ -1,13 +1,7 @@
 GET http://localhost:9005/trips
 
 ###
-GET http://localhost:9005/trips?departureDate=2022-10-25&originLat=50.849372&originLon=4.451009&destinationLat=50.849372&destinationLon=4.451009
-
-###
-GET http://localhost:9005/trips?originLat=50.849372&originLon=4.451009&destinationLat=50.849372&destinationLon=4.451009
-
-###
-GET http://localhost:9005/trips?departureDate=2022-10-25&originLat=50.849372&originLon=4.451009&destinationLat=50.849372&destinationLon=4.451009
+GET http://localhost:9005/trips?destinationLon=4.451009&destinationLat=50.849372
 
 ### /trips/{id}
 ### GET
