@@ -77,6 +77,14 @@ public class GatewayController {
     return service.getDriverTrips(id);
   }
 
+  @GetMapping("/users/{id}/passenger")
+  PassengerTrips getPassengerTrips(@PathVariable int id, @RequestHeader("Authorization") String token){
+    service.verifyToken(token);
+    User user = service.getUserById(id);
+    if(user.getId() != id) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    return service.getPassengerTrips(id);
+  }
+
   @GetMapping("/users/{id}/notifications")
   Iterable<Notification> getNotificationsFromOneUser(@PathVariable int id, @RequestHeader("Authorization") String token){
     String emailFromToken = service.verifyToken(token);

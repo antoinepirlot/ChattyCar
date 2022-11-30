@@ -153,8 +153,15 @@ Authorization: {{userToken}}
 //////////////////////
 // Get driver trips //
 //////////////////////
-###
+### get all trips where he's the driver
 GET http://localhost:9000/users/1/driver
+Authorization: {{userToken}}
+
+/////////////////////////
+// Get passenger trips //
+/////////////////////////
+### get all trips where he's a passenger
+GET http://localhost:9000/users/1/passenger
 Authorization: {{userToken}}
 
 ///////////////////

@@ -112,6 +112,10 @@ public class GatewayService {
     return tripsProxy.getDriverTrips(id);
   }
 
+  public PassengerTrips getPassengerTrips(int id){
+    return tripsProxy.getPassengerTrips(id);
+  }
+
 
 
 }

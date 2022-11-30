@@ -1,6 +1,7 @@
 package be.vinci.chattycar.gateway.data;
 
 import be.vinci.chattycar.gateway.models.NewTrip;
+import be.vinci.chattycar.gateway.models.PassengerTrips;
 import be.vinci.chattycar.gateway.models.Trip;
 import be.vinci.chattycar.gateway.models.User;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -25,5 +26,8 @@ public interface TripsProxy {
 
     @GetMapping("/trips/{id}/driver")
     List<Trip> getDriverTrips(@PathVariable int id);
+
+    @GetMapping("/trips/{id}/passenger")
+    PassengerTrips getPassengerTrips(@PathVariable int id);
 
 }
