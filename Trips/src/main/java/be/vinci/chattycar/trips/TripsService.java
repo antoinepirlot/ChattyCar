@@ -103,6 +103,18 @@ public class TripsService {
     return this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndDestinationEqualsOrderByIdDesc(0, departureDate, position);
   }
 
+  public List<Trip> getAll(LocalDate departureDate, double originLon, double originLat, double destinationLon, double destinationLat) {
+    Position origin = new Position();
+    Position destination = new Position();
+    origin.setLongitude(originLon);
+    origin.setLatitude(originLat);
+    destination.setLongitude(destinationLon);
+    destination.setLatitude(destinationLat);
+    List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndOriginEqualsAndDestinationEqualsOrderByIdDesc(0, departureDate, origin, destination);
+    //TODO sort by distance
+    return trips;
+  }
+
   /**
    * Get distance from Positions service
    * @param position
@@ -111,39 +123,6 @@ public class TripsService {
   private int getDistance(Position position) {
     //TODO
     return -1;
-  }
-
-  public List<Trip> getAll(LocalDate departureDate, Double originLat, Double originLon,
-      Double destinationLat, Double destinationLon) {
-    List<Trip> trips = null;
-    Position origin = new Position();
-    Position destination = new Position();
-    origin.setLongitude(originLon);
-    origin.setLatitude(originLat);
-    destination.setLongitude(destinationLon);
-    destination.setLatitude(destinationLat);
-    if (departureDate == null) {
-      if (originLat == null && originLon == null) { // No departure date & No origin
-        if (destinationLat == null && destinationLon == null) { // No departure date & No origin & No destination
-          trips = this.repository.getTripsByAvailableSeatingGreaterThanOrderByIdDesc(0);
-          return trips.stream().filter(t -> t.getDeparture().isAfter(LocalDate.now())).toList();
-        }
-        if(destinationLat != null && destinationLon != null) { // No departure date & No oigin & Destination
-          trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDestinationEqualsOrderByIdDesc(0, destination);
-        }
-      }
-      if (originLon != null && originLat != null) { // No departure date & Origin
-        if (destinationLat == null && destinationLon == null) { // No departure date & Origin & No destination
-          trips = this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsOrderByIdDesc(0, origin);
-          return trips.stream().filter(t -> t.getDeparture().isAfter(LocalDate.now())).toList();
-        }
-        if(destinationLat != null && destinationLon != null) { // No departure date & Origin & Destination
-          trips = this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsAndDestinationEqualsOrderByIdDesc(0, origin, destination);
-        }
-      }
-    }
-    //TODO calcul distance avec positions qui calcule la distance
-    return trips;
   }
 
   private List<Trip> filterTrips(List<Trip> trips, Position position) {

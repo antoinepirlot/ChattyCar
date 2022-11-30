@@ -24,6 +24,8 @@ public interface TripsRepository extends CrudRepository<Trip, Long> {
 
   List<Trip> getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndDestinationEqualsOrderByIdDesc(int availableSeating, LocalDate departureDate, Position destination);
 
+  List<Trip> getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndOriginEqualsAndDestinationEqualsOrderByIdDesc(int availableSeating, LocalDate departureDate, Position origin, Position destination);
+
   Trip getTripsById(int id);
 
   Trip deleteTripById(int id);

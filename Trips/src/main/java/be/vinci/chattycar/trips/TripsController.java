@@ -71,7 +71,8 @@ public class TripsController {
           //Departure date & origin & no destination
           trips = this.service.getAll(departureDate, originLon, originLat, true);
         } else {
-          //TODO
+          //Departure date & origin & destination
+          trips = this.service.getAll(departureDate, originLon, originLat, destinationLon, destinationLat);
         }
       }
     }
