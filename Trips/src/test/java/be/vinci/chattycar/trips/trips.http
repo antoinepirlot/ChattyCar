@@ -11,7 +11,7 @@ Content-Type: application/json
     "longitude": 4.451009
   },
   "departure": "2022-10-24",
-  "driverId": 12,
+  "driver_id": 12,
   "availableSeating": 2
 }
 

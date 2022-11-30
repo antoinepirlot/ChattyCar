@@ -1,9 +1,13 @@
 package be.vinci.chattycar.gateway.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @Getter
 @Setter
@@ -12,7 +16,11 @@ import lombok.Setter;
 public class NewTrip {
     private Position origin;
     private Position destination;
-    private String departure_date;
-    private int driver_id;
-    private int available_seating;
+    @DateTimeFormat(iso = ISO.DATE)
+    @JsonProperty("departure_date")
+    private LocalDate departure;
+    @JsonProperty("driver_id")
+    private int driverId;
+    @JsonProperty("available_seating")
+    private int availableSeating;
 }

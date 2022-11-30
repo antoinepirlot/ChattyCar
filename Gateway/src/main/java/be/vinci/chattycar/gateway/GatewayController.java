@@ -56,12 +56,21 @@ public class GatewayController {
     service.updateUser(user);
   }
 
+  //TODO : en dessous, il faut tester
+
   @DeleteMapping("/users/{id}")
-  void deleteOneUser(@PathVariable int id){
+  void deleteOneUser(@PathVariable int id, @RequestHeader("Authorization") String token){
+    String emailFromToken = service.verifyToken(token);
+    //check if the email exists
+    User userFromDB = service.getUserByEmail(emailFromToken);
+
+    if(userFromDB.getId() != id) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    //TODO : supprimer tous les trips, etc.
+
     service.deleteUser(id);
   }
 
-  //TODO : en dessous, il faut tester
+
 
   @GetMapping("/users/{id}/notifications")
   Iterable<Notification> getNotificationsFromOneUser(@PathVariable int id, @RequestHeader("Authorization") String token){
@@ -80,12 +89,16 @@ public class GatewayController {
   }
 
   @PostMapping("/trips")
-  Trip createOneTrip(@RequestBody NewTrip newTrip){
+  Trip createOneTrip(@RequestBody NewTrip newTrip, @RequestHeader("Authorization") String token){
+    String emailFromToken = service.verifyToken(token);
+    if(service.getUserByEmail(emailFromToken).getId() != newTrip.getDriverId()) throw new ResponseStatusException(
+        HttpStatus.FORBIDDEN);
     return service.createOneTrip(newTrip);
   }
 
   @GetMapping("/trips/{id}")
-  Trip getOneTripById(@PathVariable int id){
+  Trip getOneTripById(@PathVariable int id, @RequestHeader("Authorization") String token){
+    service.verifyToken(token);
     return service.getTripById(id);
   }
 

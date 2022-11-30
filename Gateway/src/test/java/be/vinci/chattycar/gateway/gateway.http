@@ -75,3 +75,22 @@ Authorization: {{userToken}}
   "firstname": "nicolas",
   "lastname": "dominique"
 }
+
+### create a trip
+POST http://localhost:9001/trips
+Content-Type: application/json
+Authorization: {{userToken}}
+
+{
+"origin": {
+"latitude": 50.849372,
+"longitude": 4.451009
+},
+"destination": {
+"latitude": 50.849372,
+"longitude": 4.451009
+},
+"departure_date": "2022-10-24",
+"driver_id": 1,
+"available_seating": 2
+}
