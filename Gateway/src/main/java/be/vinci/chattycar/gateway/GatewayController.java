@@ -130,7 +130,7 @@ public class GatewayController {
   }
 
   @PostMapping("/trips/{trip_id}/passengers/{passenger_id}")
-  NoIdPassenger addPassengerToATrip(@PathVariable("trip_id") int tripId, @PathVariable("passenger_id") int passengerId,
+  void addPassengerToATrip(@PathVariable("trip_id") int tripId, @PathVariable("passenger_id") int passengerId,
                            @RequestHeader("Authorization") String token){
     String email = service.verifyToken(token);
     service.getUserById(passengerId);
@@ -139,7 +139,7 @@ public class GatewayController {
     Trip trip = service.getTripById(tripId);
     String notifMessage = user.getFirstname() + " " + user.getLastname() + " veut rejoindre votre voyage";
     service.createNotification(new NewNotification(trip.getDriverId(), tripId, LocalDate.now(), notifMessage));
-    return service.addPassengerToATrip(tripId, passengerId);
+    service.addPassengerToATrip(tripId, passengerId);
   }
 
   @GetMapping("/trips/{tripId}/passengers/{passengerId}")
