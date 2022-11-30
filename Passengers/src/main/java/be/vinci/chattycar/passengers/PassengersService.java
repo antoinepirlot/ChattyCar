@@ -106,7 +106,7 @@ public class PassengersService {
    */
   public boolean deleteOne(Integer tripId, Integer userId) {
     if(!repository.existsByUserIdAndTripId(tripId, userId)) return false;
-    repository.deleteByIds(tripId, userId);
+    repository.deleteByTripIdAndUserId(tripId, userId);
     return true;
   }
 
