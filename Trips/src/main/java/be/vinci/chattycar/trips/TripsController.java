@@ -28,7 +28,6 @@ public class TripsController {
 
   @GetMapping("/trips")
   public ResponseEntity<List<Trip>> getAll(
-      //TODO parse string to local date
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate,
       @RequestParam(required = false) Double originLat,
       @RequestParam(required = false) Double originLon,
@@ -61,10 +60,11 @@ public class TripsController {
     } else {
       if (originLat == null) {
         if (destinationLat == null) {
-          //Departure data & no origin & no destination
+          //Departure date & no origin & no destination
           trips = this.service.getAll(departureDate);
         } else {
-          //TODO
+          //Departure date & no origin & destination
+          trips = this.service.getAll(departureDate, destinationLon, destinationLat);
         }
       } else {
         if (destinationLat == null) {

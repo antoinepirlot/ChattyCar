@@ -78,11 +78,25 @@ public class TripsService {
 
   /**
    * Get all trips at the departure date
-   * @param departureDate
-   * @return
+   * @param departureDate the departure date
+   * @return the list of trips matching departure date
    */
   public List<Trip> getAll(LocalDate departureDate) {
     return this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsOrderByIdDesc(0, departureDate);
+  }
+
+  /**
+   * Get all trips at the departure date with specified destination position
+   * @param departureDate the departure date
+   * @param destinationLon the destination longitude
+   * @param destinationLat the destination latitude
+   * @return the list of trips matching params
+   */
+  public List<Trip> getAll(LocalDate departureDate, double destinationLon, double destinationLat) {
+    Position destination = new Position();
+    destination.setLongitude(destinationLon);
+    destination.setLatitude(destinationLat);
+    return this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndDestinationEqualsOrderByIdDesc(0, departureDate, destination);
   }
 
   /**
