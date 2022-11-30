@@ -4,7 +4,7 @@ info:
   description: API for the positions service of Chatty Car, the ride sharing app.
   version: 1.0.0
 servers:
-  - url: 'http://localhost:9004'
+  - url: 'http://localhost:9006'
     description: dev server
 
 path:
