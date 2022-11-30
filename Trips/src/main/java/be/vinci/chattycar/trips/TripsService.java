@@ -47,12 +47,21 @@ public class TripsService {
     return this.repository.getTripsByAvailableSeatingGreaterThanOrderByIdDesc(0);
   }
 
-  public List<Trip> getAll(double destinationLon, double destinationLat) {
-    List<Trip> trips = null;
-    Position destination = new Position();
-    destination.setLongitude(destinationLon);
-    destination.setLatitude(destinationLat);
-    return this.repository.getTripsByAvailableSeatingGreaterThanAndDestinationEqualsOrderByIdDesc(0, destination);
+  /**
+   * Get all trips matching one position
+   * @param longitude the longitude of the position
+   * @param latitude the latitude of the position
+   * @param origin true if the position is the origin, false if the position is the destination
+   * @return the list of trips matching with the origin or the destination position
+   */
+  public List<Trip> getAll(double longitude, double latitude, boolean origin) {
+    Position position = new Position();
+    position.setLongitude(longitude);
+    position.setLatitude(latitude);
+    if (origin) {
+      return this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsOrderByIdDesc(0, position);
+    }
+    return this.repository.getTripsByAvailableSeatingGreaterThanAndDestinationEqualsOrderByIdDesc(0, position);
   }
 
   /**

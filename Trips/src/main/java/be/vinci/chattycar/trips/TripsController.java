@@ -42,12 +42,13 @@ public class TripsController {
           //No departure date & No origin & no destination
           trips = this.service.getAll();
         } else if (destinationLon != null && destinationLat != null) {
-          trips = this.service.getAll(destinationLon, destinationLat);
-          //TODO
+          // No departure date & no origin & destination
+          trips = this.service.getAll(destinationLon, destinationLat, false);
         }
       } else if (originLat != null && originLon != null) {
         if (destinationLon == null && destinationLat == null) {
-          //TODO
+          //No departure date & origin & no destination
+          trips = this.service.getAll(originLon, originLat, true);
         } else if (destinationLon != null && destinationLat != null) {
           //TODO
         }
@@ -67,7 +68,7 @@ public class TripsController {
         }
       }
     }
-    if (trips == null) {
+    if (trips == null || trips.isEmpty()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<>(trips, HttpStatus.ACCEPTED);
