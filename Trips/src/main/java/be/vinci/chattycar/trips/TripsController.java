@@ -30,14 +30,42 @@ public class TripsController {
   public ResponseEntity<List<Trip>> getAll(
       //TODO parse string to local date
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate,
-      @RequestParam(required = false) double originLat,
-      @RequestParam(required = false) double originLon,
-      @RequestParam(required = false) double destinationLat,
-      @RequestParam(required = false) double destinationLon
+      @RequestParam(required = false) Double originLat,
+      @RequestParam(required = false) Double originLon,
+      @RequestParam(required = false) Double destinationLat,
+      @RequestParam(required = false) Double destinationLon
   ) {
-    List<Trip> trips = this.service.getAll(
-        departureDate, originLat, originLon, destinationLat, destinationLon
-    );
+    List<Trip> trips = null;
+    if(departureDate == null) {
+      if (originLat == null && originLon == null) {
+        if (destinationLon == null && destinationLat == null) {
+          //No departure date & No origin & no destination
+          trips = this.service.getAll();
+        } else if (destinationLon != null && destinationLat != null) {
+          //TODO
+        }
+      } else if (originLat != null && originLon != null) {
+        if (destinationLon == null && destinationLat == null) {
+          //TODO
+        } else if (destinationLon != null && destinationLat != null) {
+          //TODO
+        }
+      }
+    } else {
+      if (originLat == null && originLon == null) {
+        if (destinationLon == null && destinationLat == null) {
+          //TODO
+        } else if (destinationLon != null && destinationLat != null) {
+          //TODO
+        }
+      } else if (originLat != null && originLon != null) {
+        if (destinationLon == null && destinationLat == null) {
+          //TODO
+        } else if (destinationLon != null && destinationLat != null) {
+          //TODO
+        }
+      }
+    }
     if (trips == null) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }

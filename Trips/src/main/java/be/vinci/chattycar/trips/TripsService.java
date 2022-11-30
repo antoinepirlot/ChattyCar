@@ -39,6 +39,14 @@ public class TripsService {
     return res;
   }
 
+  /**
+   * Get the lis of all trips
+   * @return the list of trips
+   */
+  public  List<Trip> getAll() {
+    return this.repository.getTripsByAvailableSeatingGreaterThanOrderByIdDesc(0);
+  }
+
   public List<Trip> getAll(LocalDate departureDate, Double originLat, Double originLon,
       Double destinationLat, Double destinationLon) {
     List<Trip> trips = null;
