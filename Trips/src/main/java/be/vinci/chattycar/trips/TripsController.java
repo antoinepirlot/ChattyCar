@@ -42,6 +42,7 @@ public class TripsController {
           //No departure date & No origin & no destination
           trips = this.service.getAll();
         } else if (destinationLon != null && destinationLat != null) {
+          trips = this.service.getAll(destinationLon, destinationLat);
           //TODO
         }
       } else if (originLat != null && originLon != null) {

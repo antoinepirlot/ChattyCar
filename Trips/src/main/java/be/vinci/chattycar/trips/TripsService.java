@@ -47,6 +47,25 @@ public class TripsService {
     return this.repository.getTripsByAvailableSeatingGreaterThanOrderByIdDesc(0);
   }
 
+  public List<Trip> getAll(double destinationLon, double destinationLat) {
+    List<Trip> trips = null;
+    Position destination = new Position();
+    destination.setLongitude(destinationLon);
+    destination.setLatitude(destinationLat);
+    trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDestinationEqualsOrderByIdDesc(0, destination);
+    return trips;
+  }
+
+  /**
+   * Get distance from Positions service
+   * @param position
+   * @return
+   */
+  private int getDistance(Position position) {
+    //TODO
+    return -1;
+  }
+
   public List<Trip> getAll(LocalDate departureDate, Double originLat, Double originLon,
       Double destinationLat, Double destinationLon) {
     List<Trip> trips = null;
