@@ -1,4 +1,4 @@
-package be.vinci.chattycar.notifications.models;
+package be.vinci.chattycar.users.models;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,10 +8,12 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
-public class User {
+public class NewUser {
   private String email;
   private String firstname;
   private String lastname;
 
+  public User toUser() {
+    return new User(0, email, firstname, lastname);
+  }
 }

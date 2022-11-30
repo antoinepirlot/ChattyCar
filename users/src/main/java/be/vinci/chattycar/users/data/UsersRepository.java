@@ -1,5 +1,6 @@
-package be.vinci.chattycar.users;
+package be.vinci.chattycar.users.data;
 
+import be.vinci.chattycar.users.models.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

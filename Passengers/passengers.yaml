@@ -8,100 +8,259 @@ servers:
     description: Development server
 paths:
 
-  /passengers/tripId/{tripId}:
+  /passengers/{trip_id}:
     parameters:
-      - name: tripId
+      - name: trip_id
         in: path
+        required: true
         schema:
           type: integer
         example: 1
         description: id of the trip
-
     get:
-      summary: Get all passengers of a trip with those waiting, accepted or refused
+      summary: Get list of passengers of a trip, with pending, accepted and refused status
       responses:
+        404:
+          description: No trip found with this ID
         200:
-          description: Returned list of passsengers
+          description: Sent list of passengers
           content:
-            'application/json':
+            application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/passenger'
+                $ref: '#/components/schemas/passengers'
+    delete:
+      summary: Delete all passengers of a trip
+      responses:
+        404:
+          description: No trip found with this ID
+        202:
+          description: Trip's passengers are deleted
 
-  /passengers/{tripId}/{passengerId}:
+
+  /passengers/{trip_id}/user/{user_id}:
     parameters:
-      - name: id
+      - name: trip_id
         in: path
+        required: true
+        schema:
+          type: integer
+        example: 1
+        description: id of the trip
+      - name: user_id
+        in: path
+        required: true
         schema:
           type: integer
         example: 1
         description: id of the user
-
     post:
-      summary: add a passenger to a trip with a waiting status
-      requestBody:
-        description: User to add
-        content:
-          'application/json':
-            schema:
-              $ref: '#/components/schemas/passenger'
+      summary: Add user as passenger to a trip with pending status (create passenger)
       responses:
-        400:
-          description: Incorrect id of a passenger
-        409:
-          description: Passenger already in the waiting list
         201:
-          description: Passenger added
-
-    get:
-      summary: Read the status of a passenger
-      responses:
-        404:
-          description: Passenger not found
-        200:
-          description: Passenger found
+          description: User added as pending passenger
           content:
-            'application/json':
+            application/json:
               schema:
                 $ref: '#/components/schemas/passenger'
-
+        400:
+          description: User is already a passenger, or the ride has no available seating left
+        404:
+          description: Trip or user not found
+        500:
+          description: internal server error
+    get:
+      summary: Get passenger status
+      responses:
+        200:
+          description: Send passenger status
+          content:
+            'text/plain':
+              schema:
+                type: string
+                enum:
+                  - pending
+                  - accepted
+                  - refused
+        404:
+          description: Trip or user not found
     put:
-      summary: Update a passenger
-      requestBody:
-        description: New status of the passenger
-        content:
-          'application/json':
-            schema:
-              $ref: '#/components/schemas/passenger'
+      summary: Update passenger status
+      parameters:
+        - name: status
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - accepted
+              - refused
       responses:
         400:
-          description: Incorrect id of a passenger
-        404:
-          description: Passenger not found
-        200:
-          description: Passenger updated
-
+          description: User is not a passenger, or is not in pending status, or status not in accepted value
+        201:
+          description: Status is updated
     delete:
-      summary: Delete a passenger
+      summary: Remove user from passengers of a trip
       responses:
-        404:
-          description: Passenger not found
         200:
-          description: Passenger deleted
+          description: Used removed from passenger
+        400:
+          description: User is not a passenger
+
+  /passengers/user/{user_id}:
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+          description: is of the passenger
+      get:
+        summary: Get all trips of a passenger
+        responses:
+          404:
+            description: No passenger found with this id
+          200:
+            description:  Get list of trips of a passenger, with pending, accepted and refused status
+            content:
+              'application/json':
+                schema:
+                  $ref: '#/components/schemas/passenger_trips'
+      delete:
+        summary: Delete all trips of a passenger
+        responses:
+          404:
+            description: No passenger found with this ID
+          201:
+            description: Passenger's trips are deleted
 
 components:
   schemas:
     passenger:
       type: object
       properties:
-        userId:
+        id:
           type: integer
-        passengerId:
+        trip_id:
+          type: integer
+        user_id:
           type: integer
         status:
           type: string
+          enum:
+            - pending
+            - accepted
+            - refused
       example:
-        userId: 1
-        passengerId: 1
-        status: waiting
+        id: 1
+        trip_id: 1
+        passenger_id: 1
+        status: accepted
+
+    no_id_passenger:
+      type: object
+      properties:
+        trip_id:
+          type: integer
+        user_id:
+          type: integer
+        status:
+          type: string
+          enum:
+            - pending
+            - accepted
+            - refused
+      example:
+        trip_id: 1
+        passenger_id: 1
+        status: accepted
+
+    passengers:
+      type: object
+      properties:
+        pending:
+          type: array
+          items:
+            $ref: '#/components/schemas/user'
+        accepted:
+          type: array
+          items:
+            $ref: '#/components/schemas/user'
+        refused:
+          type: array
+          items:
+            $ref: '#/components/schemas/user'
+
+    passenger_trips:
+      type: object
+      properties:
+        pending:
+          type: array
+          items:
+            $ref: '#/components/schemas/trip'
+        accepted:
+          type: array
+          items:
+            $ref: '#/components/schemas/trip'
+        refused:
+          type: array
+          items:
+            $ref: '#/components/schemas/trip'
+
+    position:
+      type: object
+      properties:
+        latitude:
+          type: number
+        longitude:
+          type: number
+      example:
+        latitude: 43.727421
+        longitude: 3.727421
+
+    trip:
+      type: object
+      properties:
+        id:
+          type: integer
+        origin:
+          $ref: '#/components/schemas/position'
+        destination:
+          $ref: '#/components/schemas/position'
+        departure:
+          type: string
+          description: Date in ISO 8601, YYYY-MM-DD
+        driver_id:
+          type: integer
+        available_seating:
+          type: integer
+      example:
+        id: 22
+        origin:
+          latitude: 43.727421
+          longitude: 3.727421
+        destination:
+          latitude: 43.727421
+          longitude: 3.727421
+        departure: 2023-02-28 08:23:30
+        driver_id: 1
+        available_seating: 1
+
+    user:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+      example:
+        id: 1
+        email: zoe.levaux@student.vinci.be
+        firstname: Zoé
+        lastname: Levaux
+

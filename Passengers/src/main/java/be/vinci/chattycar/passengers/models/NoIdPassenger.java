@@ -1,4 +1,4 @@
-package be.vinci.chattycar.users;
+package be.vinci.chattycar.passengers.models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,12 +15,9 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "users")
-public class User {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
-  private String email;
-  private String firstname;
-  private String lastname;
+public class NoIdPassenger {
+  private Integer tripId;
+  private Integer userId;
+  private String status;
 }
+
