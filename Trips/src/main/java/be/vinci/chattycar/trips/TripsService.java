@@ -64,6 +64,18 @@ public class TripsService {
     return this.repository.getTripsByAvailableSeatingGreaterThanAndDestinationEqualsOrderByIdDesc(0, position);
   }
 
+  public List<Trip> getAll(double originLon, double originLat, double destinationLon, double destinationLat) {
+    Position origin = new Position();
+    Position destination = new Position();
+    origin.setLongitude(originLon);
+    origin.setLatitude(originLat);
+    destination.setLongitude(destinationLon);
+    destination.setLatitude(destinationLat);
+    List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsAndDestinationEqualsOrderByIdDesc(0, origin, destination);
+    //TODO sort by distance
+    return trips;
+  }
+
   /**
    * Get distance from Positions service
    * @param position
