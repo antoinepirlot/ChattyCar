@@ -371,7 +371,7 @@ paths:
           description: Not identified as the corresponding user
         404:
           description: No trip found with this ID
-        201:
+        200:
           description: Trip is deleted
 
   /trips/{id}/passengers:

@@ -1,0 +1,171 @@
+//////////////////
+// Set up users //
+//////////////////
+
+### Create user nico
+POST http://localhost:9000/users
+Content-Type: application/json
+
+{
+  "email": "nico@gmail.com",
+  "firstname": "nicolas",
+  "lastname": "poppe",
+  "password": "password123"
+}
+
+### Create user zoe
+POST http://localhost:9000/users
+Content-Type: application/json
+
+{
+  "email": "zoe@gmail.com",
+  "firstname": "zoe",
+  "lastname": "levaux",
+  "password": "123password321"
+}
+
+### Connect user nico
+POST http://localhost:9000/auth
+Content-Type: application/json
+
+{
+  "email": "nico@gmail.com",
+  "password": "password123"
+}
+
+> {%
+ client.global.set("userToken", response.body);
+ %}
+
+### Connect user zoe
+POST http://localhost:9000/auth
+Content-Type: application/json
+
+{
+  "email": "zoe@gmail.com",
+  "password": "123password321"
+}
+
+> {%
+ client.global.set("userTokenZoe", response.body);
+ %}
+
+###
+
+/////////////////////////
+// Operations on trips //
+/////////////////////////
+
+///////////////////
+// Create a trip //
+///////////////////
+
+### Create a trip : nico creates a trip => 201
+POST http://localhost:9000/trips
+Content-Type: application/json
+Authorization: {{userToken}}
+
+{
+  "origin": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "destination": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "departure": "2023-10-28",
+  "driver_id": 1,
+  "available_seating": 3
+}
+
+### Create a trip : nico creates a trip without every field => 400
+POST http://localhost:9000/trips
+Content-Type: application/json
+Authorization: {{userToken}}
+
+{
+  "origin": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "departure": "2023-10-28",
+  "driver_id": 1
+}
+
+### Create a trip : a not connected person wants to create a trip => 401
+POST http://localhost:9000/trips
+Content-Type: application/json
+Authorization: ""
+
+{
+  "origin": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "destination": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "departure": "2023-10-28",
+  "driver_id": 1,
+  "available_seating": 3
+}
+
+### Create a trip : nico creates a trip but with zoe's driver_id => 403
+POST http://localhost:9000/trips
+Content-Type: application/json
+Authorization: {{userToken}}
+
+{
+  "origin": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "destination": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "departure": "2023-10-28",
+  "driver_id": 1,
+  "available_seating": 3
+}
+
+###
+////////////////
+// Get a trip //
+////////////////
+
+### Get trip by id : invalid id => 404
+GET http://localhost:9000/trips/251
+
+### Get trip by id : invalid id and connected => 404
+GET http://localhost:9000/trips/251
+Authorization: {{userToken}}
+
+### Get trip by id : valid id => 200
+GET http://localhost:9000/trips/1
+
+### Get trip by id : valid id and connected => 200
+GET http://localhost:9000/trips/1
+Authorization: {{userToken}}
+
+///////////////////
+// Delete a trip //
+///////////////////
+
+### Delete a trip : nico wants to delete a trip that doesn't exist => 404
+DELETE http://localhost:9000/trips/155
+Authorization: {{userToken}}
+
+### Delete a trip : zoe wants to delete nico's trip => 403
+DELETE http://localhost:9000/trips/1
+Authorization: {{userTokenZoe}}
+
+### Delete a trip : a not connected person wants to delete nico's trip => 401
+DELETE http://localhost:9000/trips/1
+Authorization: ""
+
+### Delete a trip : nico wants to delete its own trip => 200
+DELETE http://localhost:9000/trips/1
+Authorization: {{userToken}}

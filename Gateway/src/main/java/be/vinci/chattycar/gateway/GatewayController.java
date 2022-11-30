@@ -97,13 +97,16 @@ public class GatewayController {
   }
 
   @GetMapping("/trips/{id}")
-  Trip getOneTripById(@PathVariable int id, @RequestHeader("Authorization") String token){
-    service.verifyToken(token);
+  Trip getOneTripById(@PathVariable int id){
     return service.getTripById(id);
   }
 
   @DeleteMapping("/trips/{id}")
-  void deleteOneTrip(@PathVariable int id){
+  void deleteOneTrip(@PathVariable int id, @RequestHeader("Authorization") String token){
+    String email = service.verifyToken(token);
+    User user = service.getUserByEmail(email);
+    Trip trip = service.getTripById(id);
+    if(trip.getDriverId() != user.getId()) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     service.deleteTrip(id);
   }
 

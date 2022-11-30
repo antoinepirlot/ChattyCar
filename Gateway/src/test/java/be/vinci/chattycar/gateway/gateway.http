@@ -1,5 +1,5 @@
 ### Create user
-POST http://localhost:9001/users
+POST http://localhost:9000/users
 Content-Type: application/json
 
 {
@@ -10,7 +10,7 @@ Content-Type: application/json
 }
 
 ### Create user zoe
-POST http://localhost:9001/users
+POST http://localhost:9000/users
 Content-Type: application/json
 
 {
@@ -21,11 +21,11 @@ Content-Type: application/json
 }
 
 ### get user
-GET http://localhost:9001/users?email=nico@gmail.com
+GET http://localhost:9000/users?email=nico@gmail.com
 
 
 ### Connect user
-POST http://localhost:9001/auth
+POST http://localhost:9000/auth
 Content-Type: application/json
 
 {
@@ -38,7 +38,7 @@ Content-Type: application/json
  %}
 
 ### Connect user zoe
-POST http://localhost:9001/auth
+POST http://localhost:9000/auth
 Content-Type: application/json
 
 {
@@ -51,11 +51,11 @@ Content-Type: application/json
  %}
 
 ### get user by id
-GET http://localhost:9001/users/2
+GET http://localhost:9000/users/1
 Authorization: {{userToken}}
 
 ### update user password
-PUT http://localhost:9001/users
+PUT http://localhost:9000/users
 Content-Type: application/json
 Authorization: {{userToken}}
 
@@ -65,7 +65,7 @@ Authorization: {{userToken}}
 }
 
 ### update user password
-PUT http://localhost:9001/users/23
+PUT http://localhost:9000/users/23
 Content-Type: application/json
 Authorization: {{userToken}}
 
@@ -74,23 +74,4 @@ Authorization: {{userToken}}
   "email": "nico@gmail.com",
   "firstname": "nicolas",
   "lastname": "dominique"
-}
-
-### create a trip
-POST http://localhost:9001/trips
-Content-Type: application/json
-Authorization: {{userToken}}
-
-{
-"origin": {
-"latitude": 50.849372,
-"longitude": 4.451009
-},
-"destination": {
-"latitude": 50.849372,
-"longitude": 4.451009
-},
-"departure_date": "2022-10-24",
-"driver_id": 1,
-"available_seating": 2
 }

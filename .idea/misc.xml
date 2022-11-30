@@ -3,12 +3,14 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/users/pom.xml" />
-        <option value="$PROJECT_DIR$/Passengers/pom.xml" />
+        <option value="$PROJECT_DIR$/Positions/pom.xml" />
+        <option value="$PROJECT_DIR$/Authentication/pom.xml" />
         <option value="$PROJECT_DIR$/EurekaServer/pom.xml" />
         <option value="$PROJECT_DIR$/Gateway/pom.xml" />
-        <option value="$PROJECT_DIR$/Authentication/pom.xml" />
+        <option value="$PROJECT_DIR$/notifications/pom.xml" />
+        <option value="$PROJECT_DIR$/Passengers/pom.xml" />
         <option value="$PROJECT_DIR$/trips/pom.xml" />
+        <option value="$PROJECT_DIR$/users/pom.xml" />
       </list>
     </option>
   </component>
