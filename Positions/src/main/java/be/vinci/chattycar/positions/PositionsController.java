@@ -17,7 +17,7 @@ public class PositionsController {
   }
 
   @GetMapping("/positions")
-  public ResponseEntity<Integer> getDistanceBetween2Points(
+  public int getDistanceBetween2Points(
       @RequestParam double startLon,
       @RequestParam double endLon,
       @RequestParam double startLat,
@@ -32,6 +32,6 @@ public class PositionsController {
     if (distanceInMeters < 0) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    return new ResponseEntity<>(distanceInMeters, HttpStatus.OK);
+    return distanceInMeters;
   }
 }

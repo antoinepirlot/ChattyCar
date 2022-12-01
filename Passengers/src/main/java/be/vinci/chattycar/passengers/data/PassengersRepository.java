@@ -18,7 +18,7 @@ public interface PassengersRepository extends CrudRepository<Passenger, Long> {
   Optional<Passenger> findByUserIdAndTripId(long tripId, long userId);
 
   @Transactional
-  void deleteByTripIdAndUserId(Integer tripId, Integer userId);
+  void deleteByUserIdAndTripId(Integer tripId, Integer userId);
 
   @Transactional
   void deleteByUserId(Integer userId);

@@ -28,17 +28,55 @@ public class TripsController {
 
   @GetMapping("/trips")
   public ResponseEntity<List<Trip>> getAll(
-      //TODO parse string to local date
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate,
-      @RequestParam(required = false) double originLat,
-      @RequestParam(required = false) double originLon,
-      @RequestParam(required = false) double destinationLat,
-      @RequestParam(required = false) double destinationLon
+      @RequestParam(required = false) Double originLat,
+      @RequestParam(required = false) Double originLon,
+      @RequestParam(required = false) Double destinationLat,
+      @RequestParam(required = false) Double destinationLon
   ) {
-    List<Trip> trips = this.service.getAll(
-        departureDate, originLat, originLon, destinationLat, destinationLon
-    );
-    if (trips == null) {
+    if ((originLon == null && originLat != null || originLon != null && originLat == null)
+        || (destinationLon == null && destinationLat != null || destinationLon != null && destinationLat == null)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    }
+    List<Trip> trips = null;
+    if(departureDate == null) {
+      if (originLat == null) {
+        if (destinationLat == null) {
+          //No departure date & No origin & no destination
+          trips = this.service.getAll();
+        } else {
+          // No departure date & no origin & destination
+          trips = this.service.getAll(destinationLon, destinationLat, false);
+        }
+      } else {
+        if (destinationLat == null) {
+          //No departure date & origin & no destination
+          trips = this.service.getAll(originLon, originLat, true);
+        } else {
+          //No departure date & origin & destination
+          trips = this.service.getAll(originLon, originLat, destinationLon, destinationLat);
+        }
+      }
+    } else {
+      if (originLat == null) {
+        if (destinationLat == null) {
+          //Departure date & no origin & no destination
+          trips = this.service.getAll(departureDate);
+        } else {
+          //Departure date & no origin & destination
+          trips = this.service.getAll(departureDate, destinationLon, destinationLat, false);
+        }
+      } else {
+        if (destinationLat == null) {
+          //Departure date & origin & no destination
+          trips = this.service.getAll(departureDate, originLon, originLat, true);
+        } else {
+          //Departure date & origin & destination
+          trips = this.service.getAll(departureDate, originLon, originLat, destinationLon, destinationLat);
+        }
+      }
+    }
+    if (trips == null || trips.isEmpty()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<>(trips, HttpStatus.ACCEPTED);

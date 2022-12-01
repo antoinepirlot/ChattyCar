@@ -1,7 +1,6 @@
 package be.vinci.chattycar.passengers.data;
 
 import be.vinci.chattycar.passengers.models.Trip;
-import be.vinci.chattycar.passengers.models.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.GetMapping;

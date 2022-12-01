@@ -39,60 +39,120 @@ public class TripsService {
     return res;
   }
 
-  public List<Trip> getAll(LocalDate departureDate, Double originLat, Double originLon,
-      Double destinationLat, Double destinationLon) {
-    List<Trip> trips = null;
+  /**
+   * Get the lis of all trips
+   * @return the list of trips
+   */
+  public  List<Trip> getAll() {
+    return this.repository.getTripsByAvailableSeatingGreaterThanOrderByIdDesc(0);
+  }
+
+  /**
+   * Get all trips matching one position
+   * @param longitude the longitude of the position
+   * @param latitude the latitude of the position
+   * @param origin true if the position is the origin, false if the position is the destination
+   * @return the list of trips matching with the origin or the destination position
+   */
+  public List<Trip> getAll(double longitude, double latitude, boolean origin) {
+    Position position = new Position();
+    position.setLongitude(longitude);
+    position.setLatitude(latitude);
+    if (origin) {
+      return this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsOrderByIdDesc(0, position);
+    }
+    return this.repository.getTripsByAvailableSeatingGreaterThanAndDestinationEqualsOrderByIdDesc(0, position);
+  }
+
+  public List<Trip> getAll(double originLon, double originLat, double destinationLon, double destinationLat) {
     Position origin = new Position();
     Position destination = new Position();
     origin.setLongitude(originLon);
     origin.setLatitude(originLat);
     destination.setLongitude(destinationLon);
     destination.setLatitude(destinationLat);
-    if (departureDate == null) {
-      if (originLat == null && originLon == null) { // No departure date & No origin
-        if (destinationLat == null && destinationLon == null) { // No departure date & No origin & No destination
-          trips = this.repository.getTripsByAvailableSeatingGreaterThanOrderByIdDesc(0);
-          return trips.stream().filter(t -> t.getDeparture().isAfter(LocalDate.now())).toList();
-        }
-        if(destinationLat != null && destinationLon != null) { // No departure date & No oigin & Destination
-          trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDestinationEqualsOrderByIdDesc(0, destination);
-        }
-      }
-      if (originLon != null && originLat != null) { // No departure date & Origin
-        if (destinationLat == null && destinationLon == null) { // No departure date & Origin & No destination
-          trips = this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsOrderByIdDesc(0, origin);
-          return trips.stream().filter(t -> t.getDeparture().isAfter(LocalDate.now())).toList();
-        }
-        if(destinationLat != null && destinationLon != null) { // No departure date & Origin & Destination
-          trips = this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsAndDestinationEqualsOrderByIdDesc(0, origin, destination);
-        }
-      }
-    }
-    //TODO calcul distance avec positions qui calcule la distance
+    List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsAndDestinationEqualsOrderByIdDesc(0, origin, destination);
+    //TODO sort by distance
     return trips;
   }
 
-  private List<Trip> filterTrips(List<Trip> trips, Position position) {
-    return trips.stream()
-        .filter(t -> t.getOrigin().equals(position))
-        .sorted((t1, t2) -> {
-          double t1StartLon = t1.getOrigin().getLongitude();
-          double t1StartLat = t1.getOrigin().getLatitude();
-          double t1EndLon = t1.getOrigin().getLongitude();
-          double t1EndLat = t1.getOrigin().getLatitude();
-
-          double t2StartLon = t2.getOrigin().getLongitude();
-          double t2StartLat = t2.getOrigin().getLatitude();
-          double t2EndLon = t2.getOrigin().getLongitude();
-          double t2EndLat = t2.getOrigin().getLatitude();
-
-          int dist1 = this.positionsProxy.getDistance(t1StartLon, t1EndLon, t1StartLat, t1EndLat);
-          int dist2 = this.positionsProxy.getDistance(t2StartLon, t2EndLon, t2StartLat, t2EndLat);
-
-          return dist1 - dist2;
-        })
-        .toList();
+  /**
+   * Get all trips at the departure date
+   * @param departureDate the departure date
+   * @return the list of trips matching departure date
+   */
+  public List<Trip> getAll(LocalDate departureDate) {
+    return this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsOrderByIdDesc(0, departureDate);
   }
+
+  /**
+   * Get all trips at the departure date with specified position
+   * @param departureDate the departure date
+   * @param longitude the destination longitude
+   * @param latitude the destination latitude
+   * @param origin true if position is origin,false if the position is destination
+   * @return the list of trips matching params
+   */
+  public List<Trip> getAll(LocalDate departureDate, double longitude, double latitude, boolean origin) {
+    Position position = new Position();
+    position.setLongitude(longitude);
+    position.setLatitude(latitude);
+    if (origin) {
+      return this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndOriginEqualsOrderByIdDesc(0, departureDate, position);
+    }
+    return this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndDestinationEqualsOrderByIdDesc(0, departureDate, position);
+  }
+
+  public List<Trip> getAll(LocalDate departureDate, double originLon, double originLat, double destinationLon, double destinationLat) {
+    Position origin = new Position();
+    Position destination = new Position();
+    origin.setLongitude(originLon);
+    origin.setLatitude(originLat);
+    destination.setLongitude(destinationLon);
+    destination.setLatitude(destinationLat);
+    List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndOriginEqualsAndDestinationEqualsOrderByIdDesc(0, departureDate, origin, destination);
+    //TODO sort by distance
+    int distance = this.getDistance(origin, destination);
+    System.out.println(distance);
+    return trips;
+  }
+
+  /**
+   * Get distance from Positions service
+   * @param origin the origin
+   * @param destination the destination
+   * @return the distance between origin and destination
+   */
+  private int getDistance(Position origin, Position destination) {
+    return this.positionsProxy.getDistance(
+        origin.getLongitude(),
+        destination.getLongitude(),
+        origin.getLatitude(),
+        destination.getLatitude()
+    );
+  }
+
+//  private List<Trip> filterTrips(List<Trip> trips) {
+//    return trips.stream()
+//        .filter(t -> t.getOrigin())
+//        .sorted((t1, t2) -> {
+//          double t1StartLon = t1.getOrigin().getLongitude();
+//          double t1StartLat = t1.getOrigin().getLatitude();
+//          double t1EndLon = t1.getOrigin().getLongitude();
+//          double t1EndLat = t1.getOrigin().getLatitude();
+//
+//          double t2StartLon = t2.getOrigin().getLongitude();
+//          double t2StartLat = t2.getOrigin().getLatitude();
+//          double t2EndLon = t2.getOrigin().getLongitude();
+//          double t2EndLat = t2.getOrigin().getLatitude();
+//
+//          int dist1 = this.positionsProxy.getDistance(t1StartLon, t1EndLon, t1StartLat, t1EndLat);
+//          int dist2 = this.positionsProxy.getDistance(t2StartLon, t2EndLon, t2StartLat, t2EndLat);
+//
+//          return dist1 - dist2;
+//        })
+//        .toList();
+//  }
 
   /**
    * Get one trip identified by its id
