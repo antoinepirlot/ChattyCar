@@ -19,11 +19,15 @@ public class GatewayController {
 
   @PostMapping("/auth")
   String connect(@RequestBody Credentials credentials) {
+    if(credentials.getEmail().trim().length() == 0 ||
+            credentials.getPassword().trim().length() == 0 ||
+            !credentials.getEmail().contains("@")) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     return service.connect(credentials);
   }
 
   @PostMapping("/users")
   ResponseEntity<User> createOneUser(@RequestBody NewUser newUser){
+    if(hasUserNotCorrectFields(newUser)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     return service.createOneUser(newUser);
   }
 
@@ -166,6 +170,28 @@ public class GatewayController {
   void removePassengerFromTrip(@PathVariable("trip_id") int tripId, @PathVariable("user_id") int passengerId,
                                @RequestHeader("Authorization") String token){
     service.removePassengerFromTrip(tripId, passengerId);
+  }
+
+  private boolean isEmailValid(String email){
+    return email.trim().length() != 0 && email.contains("@");
+  }
+
+  private boolean isStringEmpty(String string){
+    return string.trim().length() == 0;
+  }
+
+  private boolean isInsecureCredentialsValid(InsecureCredentials insecureCredentials){
+    return isEmailValid(insecureCredentials.getEmail()) && !isStringEmpty(insecureCredentials.getPassword());
+  }
+
+  private boolean hasUserNotCorrectFields(NewUser newUser){
+    return !isEmailValid(newUser.getEmail()) ||
+            !isInsecureCredentialsValid(newUser.getInsecureCredentials()) ||
+            isStringEmpty(newUser.getLastname()) ||
+            isStringEmpty(newUser.getFirstname()) ||
+            isStringEmpty(newUser.getPassword())
+            ;
+
   }
 
 
