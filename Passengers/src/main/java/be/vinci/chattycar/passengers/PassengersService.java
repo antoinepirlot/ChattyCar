@@ -81,7 +81,7 @@ public class PassengersService {
    */
   public String getPassengerStatus(long tripId, long userId) {
     Optional<Passenger> p = repository.findByUserIdAndTripId(tripId, userId);
-    if (!p.isPresent()) return null;
+    if (p.isEmpty()) return null;
     return p.get().getStatus();
   }
 
@@ -106,7 +106,7 @@ public class PassengersService {
    */
   public boolean deleteOne(Integer tripId, Integer userId) {
     if(!repository.existsByUserIdAndTripId(tripId, userId)) return false;
-    repository.deleteByIds(tripId, userId);
+    repository.deleteByUserIdAndTripId(tripId, userId);
     return true;
   }
 
