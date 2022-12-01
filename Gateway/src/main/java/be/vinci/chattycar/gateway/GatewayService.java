@@ -80,6 +80,20 @@ public class GatewayService {
    * @param id Id of the user
    */
   public void deleteUser(int id){
+    // delete all his trips
+    for(Trip trip : tripsProxy.getDriverTrips(id)){
+      try{
+        passengersProxy.removeAllPassengersFromTrip(trip.getId());
+      }catch(ResponseStatusException e){
+        if(!e.getStatus().equals(HttpStatus.NOT_FOUND)) throw e;
+      }
+      tripsProxy.deleteOne(trip.getId());
+    }
+    // delete all notifications
+    notificationProxy.deleteFromUser(id);
+    // delete credentials and user
+    String email = usersProxy.getOneById(id).getEmail();
+    authenticationProxy.deleteCredentials(email);
     usersProxy.deleteOne(id);
   }
 

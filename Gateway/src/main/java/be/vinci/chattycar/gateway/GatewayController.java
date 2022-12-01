@@ -66,10 +66,7 @@ public class GatewayController {
     String emailFromToken = service.verifyToken(token);
     //check if the email exists
     User userFromDB = service.getUserByEmail(emailFromToken);
-
     if(!userFromDB.getId().equals(id)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-    //TODO : supprimer tous les trips, etc.
-
     service.deleteUser(id);
   }
 
