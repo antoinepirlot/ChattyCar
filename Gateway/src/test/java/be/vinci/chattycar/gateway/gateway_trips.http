@@ -115,7 +115,7 @@ Authorization: ""
 ### Create a trip : nico creates a trip but with zoe's driver_id => 403
 POST http://localhost:9000/trips
 Content-Type: application/json
-Authorization: {{userToken}}
+Authorization: {{userTokenZoe}}
 
 {
   "origin": {
@@ -149,6 +149,10 @@ GET http://localhost:9000/trips/1
 ### Get trip by id : valid id and connected => 200
 GET http://localhost:9000/trips/1
 Authorization: {{userToken}}
+
+### Get list of trips with optional search queries
+GET http://localhost:9000/trips?departureDate=2024-10-28
+
 
 //////////////////////
 // Get driver trips //
