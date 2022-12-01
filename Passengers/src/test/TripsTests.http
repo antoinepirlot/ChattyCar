@@ -1,0 +1,19 @@
+POST http://localhost:9005/trips
+Content-Type: application/json
+
+{
+  "origin": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "destination": {
+    "latitude": 50.849372,
+    "longitude": 4.451009
+  },
+  "departure": "2022-10-25",
+  "driver_id": 12,
+  "available_seating": 2
+}
+
+###
+GET http://localhost:9005/trips

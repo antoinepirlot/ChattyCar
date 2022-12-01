@@ -20,8 +20,6 @@ paths:
     get:
       summary: Get list of passengers of a trip, with pending, accepted and refused status
       responses:
-        404:
-          description: No trip found with this ID
         200:
           description: Sent list of passengers
           content:
@@ -33,7 +31,7 @@ paths:
       responses:
         404:
           description: No trip found with this ID
-        202:
+        200:
           description: Trip's passengers are deleted
 
 
@@ -103,7 +101,7 @@ paths:
       summary: Remove user from passengers of a trip
       responses:
         200:
-          description: Used removed from passenger
+          description: User removed from passenger
         400:
           description: User is not a passenger
 
@@ -119,8 +117,6 @@ paths:
       get:
         summary: Get all trips of a passenger
         responses:
-          404:
-            description: No passenger found with this id
           200:
             description:  Get list of trips of a passenger, with pending, accepted and refused status
             content:
@@ -132,7 +128,7 @@ paths:
         responses:
           404:
             description: No passenger found with this ID
-          201:
+          200:
             description: Passenger's trips are deleted
 
 components:

@@ -1,0 +1,10 @@
+### Get list of passengers of a trip, with pending, accepted and refused status
+GET http://localhost:9003/passengers/1
+
+### Delete all passengers of a trip
+DELETE http://localhost:9003/passengers/1
+
+### Add user as passenger to a trip with pending status (create passenger)
+POST http://localhost:9003/passengers/1/user/1
+
+###

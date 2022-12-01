@@ -33,7 +33,7 @@ public class PassengersService {
    */
   public Passengers getPassengers(Integer tripId) {
     List<Passenger> passengerList = repository.getAllPassengersByTripId(tripId);
-    if(passengerList == null || passengerList.isEmpty()) return null;
+    if(passengerList == null || passengerList.isEmpty()) return new Passengers(null, null, null);
 
     List<User> accepted = passengerList.stream()
         .filter(passenger -> passenger.getStatus().equals("accepted"))
@@ -118,7 +118,7 @@ public class PassengersService {
   public PassengerTrips getTrips(Integer userId) {
     List<Passenger> passengerList =  repository.getAllPassengersByUserId(userId);
 
-    if(passengerList == null || passengerList.isEmpty()) return null;
+    if(passengerList == null || passengerList.isEmpty()) return new PassengerTrips(null, null, null);
 
     List<Trip> accepted = passengerList.stream()
         .filter(passenger -> passenger.getStatus().equals("accepted"))
