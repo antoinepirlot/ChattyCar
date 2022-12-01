@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -84,23 +85,20 @@ public class PassengersController {
    * Update passenger status
    * @param tripId id of the trip
    * @param userId id of the user
-   * @param status status of the passenger
-   * @return 201 if the status is updated
-   * @throws PassengerNotFound404Exception if the passenger does not exist
+   * @param passengerStatusUpdate status of the passenger
    */
   @PutMapping("/passengers/{trip_id}/user/{user_id}")
   public void updatePassengerStatus(@PathVariable("trip_id") Integer tripId,
-      @PathVariable("user_id") Integer userId, @RequestParam(required = true) String status) throws PassengerNotFound404Exception {
-    if (status.isEmpty() || !(status.equals("accepted") || status.equals("refused"))
-        || !service.updateOne(tripId, userId, status)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-    else throw new ResponseStatusException(HttpStatus.CREATED);
+      @PathVariable("user_id") Integer userId, @RequestBody(required = true) PassengerStatusUpdate passengerStatusUpdate) {
+    if (passengerStatusUpdate == null || (!passengerStatusUpdate.status().equals("accepted") && !passengerStatusUpdate.status().equals("refused"))
+        || !service.updateOne(tripId, userId, passengerStatusUpdate.status())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+     throw new ResponseStatusException(HttpStatus.CREATED);
   }
 
   /**
    * Remove user from passengers of a trip
    * @param tripId id of the trip
    * @param userId id of the user
-   * @return 200 if the passenger was deleted
    * @throws PassengerNotFound404Exception if the passenger does not exist
    */
   @DeleteMapping("/passengers/{trip_id}/user/{user_id}")
