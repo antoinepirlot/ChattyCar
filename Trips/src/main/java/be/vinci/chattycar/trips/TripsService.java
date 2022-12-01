@@ -29,14 +29,8 @@ public class TripsService {
         newTrip.getDeparture())) {
       return null;
     }
-    var toSave = newTrip.toTrip();
-    Trip res = null;
-    try {
-      res = this.repository.save(toSave);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-    return res;
+    Trip toSave = newTrip.toTrip();
+    return this.repository.save(toSave);
   }
 
   /**
@@ -131,28 +125,6 @@ public class TripsService {
         destination.getLatitude()
     );
   }
-
-//  private List<Trip> filterTrips(List<Trip> trips) {
-//    return trips.stream()
-//        .filter(t -> t.getOrigin())
-//        .sorted((t1, t2) -> {
-//          double t1StartLon = t1.getOrigin().getLongitude();
-//          double t1StartLat = t1.getOrigin().getLatitude();
-//          double t1EndLon = t1.getOrigin().getLongitude();
-//          double t1EndLat = t1.getOrigin().getLatitude();
-//
-//          double t2StartLon = t2.getOrigin().getLongitude();
-//          double t2StartLat = t2.getOrigin().getLatitude();
-//          double t2EndLon = t2.getOrigin().getLongitude();
-//          double t2EndLat = t2.getOrigin().getLatitude();
-//
-//          int dist1 = this.positionsProxy.getDistance(t1StartLon, t1EndLon, t1StartLat, t1EndLat);
-//          int dist2 = this.positionsProxy.getDistance(t2StartLon, t2EndLon, t2StartLat, t2EndLat);
-//
-//          return dist1 - dist2;
-//        })
-//        .toList();
-//  }
 
   /**
    * Get one trip identified by its id
