@@ -15,15 +15,13 @@ public interface PassengersRepository extends CrudRepository<Passenger, Long> {
   boolean existsByTripId(Integer tripId);
   boolean existsByUserId(Integer userId);
 
-  Optional<Passenger> findByUserIdAndTripId(long tripId, long userId);
+  Optional<Passenger> findByUserIdAndTripId(Integer tripId, Integer userId);
 
-  @Transactional
+
   void deleteByUserIdAndTripId(Integer tripId, Integer userId);
 
-  @Transactional
   void deleteByUserId(Integer userId);
 
-  @Transactional
   void deleteByTripId(Integer tripId);
 
   List<Passenger> getAllPassengersByUserId(Integer userId);
