@@ -1,7 +1,6 @@
 package be.vinci.chattycar.gateway.data;
 
 import be.vinci.chattycar.gateway.models.Credentials;
-import be.vinci.chattycar.gateway.models.InsecureCredentials;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -17,10 +16,10 @@ public interface AuthenticationProxy {
   String verify(@RequestBody String token);
 
   @PostMapping({"/authentication/{email}"})
-  ResponseEntity<Void> createOne(@PathVariable String email, @RequestBody InsecureCredentials credentials);
+  ResponseEntity<Void> createOne(@PathVariable String email, @RequestBody Credentials credentials);
 
   @PutMapping({"/authentication/{email}"})
-  void updateOne(@PathVariable String email, @RequestBody InsecureCredentials credentials);
+  void updateOne(@PathVariable String email, @RequestBody Credentials credentials);
 
   @DeleteMapping({"/authentication/{email}"})
   void deleteCredentials(@PathVariable String email);

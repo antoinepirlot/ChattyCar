@@ -37,11 +37,11 @@ public class GatewayService {
 
   public ResponseEntity<User> createOneUser(NewUser newUser){
     ResponseEntity<User> responseUser = usersProxy.createOne(newUser);
-    authenticationProxy.createOne(newUser.getEmail(), newUser.getInsecureCredentials());
+    authenticationProxy.createOne(newUser.getEmail(), newUser.getCredentials());
     return responseUser;
   }
 
-  public void updateUserCredentials(String email, InsecureCredentials credentials){
+  public void updateUserCredentials(String email, Credentials credentials){
     authenticationProxy.updateOne(email, credentials);
   }
 
@@ -149,19 +149,29 @@ public class GatewayService {
   }
 
   /**
-   * Deletes a user from a trip
+   * Deletes a passenger from a trip
    * @param tripId Id of the trip
-   * @param userId Id of the user
+   * @param passengerId Id of the passenger
    */
-  public void removePassengerFromTrip(int tripId, int userId){
-    passengersProxy.removePassengerFromTrip(tripId, userId);
+  public void removePassengerFromTrip(int tripId, int passengerId){
+    passengersProxy.removePassengerFromTrip(tripId, passengerId);
   }
+
+  /**
+   * Deletes all passengers from a trip
+   * @param tripId Id of the trip
+   */
+  public void removeAllPassengersFromTrip(int tripId){
+    passengersProxy.removeAllPassengersFromTrip(tripId);
+  }
+
+
 
   public Notification createNotification(NewNotification newNotification){
     return notificationProxy.createOne(newNotification).getBody();
   }
 
-  public List<Trip> getDriverTrips(int id){
+  public Iterable<Trip> getDriverTrips(int id){
     return tripsProxy.getDriverTrips(id);
   }
 

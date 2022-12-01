@@ -127,7 +127,7 @@ Authorization: {{userToken}}
     "longitude": 4.451009
   },
   "departure": "2024-10-28",
-  "driver_id": 1,
+  "driver_id": 2,
   "available_seating": 3
 }
 
@@ -181,5 +181,5 @@ DELETE http://localhost:9000/trips/1
 Authorization: ""
 
 ### Delete a trip : nico wants to delete its own trip => 200
-DELETE http://localhost:9000/trips/1
+DELETE http://localhost:9000/trips/3
 Authorization: {{userToken}}

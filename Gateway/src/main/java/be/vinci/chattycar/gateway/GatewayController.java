@@ -19,31 +19,30 @@ public class GatewayController {
 
   @PostMapping("/auth")
   String connect(@RequestBody Credentials credentials) {
-    if(credentials.getEmail().trim().length() == 0 ||
-            credentials.getPassword().trim().length() == 0 ||
-            !credentials.getEmail().contains("@")) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    if(!isCredentialsValid(credentials)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     return service.connect(credentials);
   }
 
   @PostMapping("/users")
   ResponseEntity<User> createOneUser(@RequestBody NewUser newUser){
-    if(hasUserNotCorrectFields(newUser)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    if(hasNewUserNotCorrectFields(newUser)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     return service.createOneUser(newUser);
-  }
-
-  @PutMapping("/users")
-  void updateUserPassword(@RequestBody Credentials credentials, @RequestHeader("Authorization") String token ){
-    String emailFromToken = service.verifyToken(token);
-    //check if the email exists
-    service.getUserByEmail(credentials.getEmail());
-
-    if(!emailFromToken.equals(credentials.getEmail())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-    service.updateUserCredentials(credentials.getEmail(), new InsecureCredentials(credentials.getEmail(),credentials.getPassword()));
   }
 
   @GetMapping("/users")
   User getOneUserByEmail(@RequestParam String email){
     return service.getUserByEmail(email);
+  }
+
+  @PutMapping("/users")
+  void updateUserPassword(@RequestBody Credentials credentials, @RequestHeader("Authorization") String token ){
+    if(!isCredentialsValid(credentials)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    String emailFromToken = service.verifyToken(token);
+    //check if the email exists
+    service.getUserByEmail(credentials.getEmail());
+
+    if(!emailFromToken.equals(credentials.getEmail())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    service.updateUserCredentials(credentials.getEmail(), new Credentials(credentials.getEmail(),credentials.getPassword()));
   }
 
   @GetMapping("/users/{id}")
@@ -54,7 +53,7 @@ public class GatewayController {
 
   @PutMapping("/users/{id}")
   void updateOneUser(@PathVariable int id, @RequestBody User user, @RequestHeader("Authorization") String token){
-    if(id != user.getId()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    if(hasUserNotCorrectFields(user) || id != user.getId()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     service.getUserById(id);
     String emailFromToken = service.verifyToken(token);
     if(!emailFromToken.equals(user.getEmail())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
@@ -74,17 +73,19 @@ public class GatewayController {
   }
 
   @GetMapping("/users/{id}/driver")
-  List<Trip> getDriverTrips(@PathVariable int id, @RequestHeader("Authorization") String token){
-    service.verifyToken(token);
-    User user = service.getUserById(id);
+  Iterable<Trip> getDriverTrips(@PathVariable int id, @RequestHeader("Authorization") String token){
+    String email = service.verifyToken(token);
+    User user = service.getUserByEmail(email);
+    service.getUserById(id);
     if(user.getId() != id) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     return service.getDriverTrips(id);
   }
 
   @GetMapping("/users/{id}/passenger")
   PassengerTrips getPassengerTrips(@PathVariable int id, @RequestHeader("Authorization") String token){
-    service.verifyToken(token);
-    User user = service.getUserById(id);
+    String email = service.verifyToken(token);
+    User user = service.getUserByEmail(email);
+    service.getUserById(id);
     if(user.getId() != id) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     return service.getPassengerTrips(id);
   }
@@ -92,6 +93,7 @@ public class GatewayController {
   @GetMapping("/users/{id}/notifications")
   Iterable<Notification> getNotificationsFromOneUser(@PathVariable int id, @RequestHeader("Authorization") String token){
     String emailFromToken = service.verifyToken(token);
+    service.getUserById(id);
     if(service.getUserByEmail(emailFromToken).getId() != id) throw new ResponseStatusException(
         HttpStatus.FORBIDDEN);
     return service.getAllNotificationsFromUser(id);
@@ -100,6 +102,7 @@ public class GatewayController {
   @DeleteMapping("/users/{id}/notifications")
   void deleteAllNotificationsFromOneUser(@PathVariable int id, @RequestHeader("Authorization") String token){
     String emailFromToken = service.verifyToken(token);
+    service.getUserById(id);
     if(service.getUserByEmail(emailFromToken).getId() != id) throw new ResponseStatusException(
         HttpStatus.FORBIDDEN);
     service.deleteAllNotificationsFromUser(id);
@@ -107,8 +110,9 @@ public class GatewayController {
 
   @PostMapping("/trips")
   ResponseEntity<Trip> createOneTrip(@RequestBody NewTrip newTrip, @RequestHeader("Authorization") String token){
+    if(hasNewTripNotCorrectFields(newTrip)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     String emailFromToken = service.verifyToken(token);
-    if(service.getUserByEmail(emailFromToken).getId() != newTrip.getDriverId()) throw new ResponseStatusException(
+    if(!service.getUserByEmail(emailFromToken).getId().equals(newTrip.getDriverId())) throw new ResponseStatusException(
         HttpStatus.FORBIDDEN);
     return service.createOneTrip(newTrip);
   }
@@ -124,6 +128,11 @@ public class GatewayController {
     User user = service.getUserByEmail(email);
     Trip trip = service.getTripById(id);
     if(trip.getDriverId() != user.getId()) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    try{
+      service.removeAllPassengersFromTrip(id);
+    }catch(ResponseStatusException e){
+      if(!e.getStatus().equals(HttpStatus.NOT_FOUND)) throw e;
+    }
     service.deleteTrip(id);
   }
 
@@ -180,18 +189,35 @@ public class GatewayController {
     return string.trim().length() == 0;
   }
 
-  private boolean isInsecureCredentialsValid(InsecureCredentials insecureCredentials){
+  private boolean isCredentialsValid(Credentials insecureCredentials){
     return isEmailValid(insecureCredentials.getEmail()) && !isStringEmpty(insecureCredentials.getPassword());
   }
 
-  private boolean hasUserNotCorrectFields(NewUser newUser){
+  private boolean isPositionValid(Position position){
+    return position.getLatitude() != null && position.getLongitude() != null;
+  }
+
+  private boolean hasUserNotCorrectFields(User user){
+    return !isEmailValid(user.getEmail()) ||
+            isStringEmpty(user.getLastname()) ||
+            isStringEmpty(user.getFirstname()) ||
+            user.getId() == null;
+  }
+
+  private boolean hasNewUserNotCorrectFields(NewUser newUser){
     return !isEmailValid(newUser.getEmail()) ||
-            !isInsecureCredentialsValid(newUser.getInsecureCredentials()) ||
+            !isCredentialsValid(newUser.getCredentials()) ||
             isStringEmpty(newUser.getLastname()) ||
             isStringEmpty(newUser.getFirstname()) ||
-            isStringEmpty(newUser.getPassword())
-            ;
+            isStringEmpty(newUser.getPassword());
+  }
 
+  private boolean hasNewTripNotCorrectFields(NewTrip newTrip){
+    return newTrip.getDeparture() == null ||
+            newTrip.getAvailableSeating() == null ||
+            newTrip.getDriverId() == null ||
+            !isPositionValid(newTrip.getOrigin()) ||
+            !isPositionValid(newTrip.getDestination());
   }
 
 
