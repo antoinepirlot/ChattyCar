@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "passengers")
 public interface PassengersProxy {
 
-  @GetMapping("/passengers/tripId/{tripId}")
+  @GetMapping("/passengers/{tripId}")
   PassengerTrips readPassengerTrips(@PathVariable int tripId);
 }
