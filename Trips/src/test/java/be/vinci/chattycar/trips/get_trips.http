@@ -36,3 +36,6 @@ GET http://localhost:9005/trips/12/driver
 
 ###
 GET http://localhost:9005/trips/0/driver
+
+###
+GET http://localhost:9005/trips/1/passenger
