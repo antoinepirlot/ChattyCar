@@ -102,7 +102,7 @@ public class GatewayController {
   }
 
   @PostMapping("/trips")
-  Trip createOneTrip(@RequestBody NewTrip newTrip, @RequestHeader("Authorization") String token){
+  ResponseEntity<Trip> createOneTrip(@RequestBody NewTrip newTrip, @RequestHeader("Authorization") String token){
     String emailFromToken = service.verifyToken(token);
     if(service.getUserByEmail(emailFromToken).getId() != newTrip.getDriverId()) throw new ResponseStatusException(
         HttpStatus.FORBIDDEN);
