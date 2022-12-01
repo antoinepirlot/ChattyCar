@@ -6,9 +6,13 @@ import be.vinci.chattycar.gateway.data.PassengersProxy;
 import be.vinci.chattycar.gateway.data.TripsProxy;
 import be.vinci.chattycar.gateway.data.UsersProxy;
 import be.vinci.chattycar.gateway.models.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -102,6 +106,11 @@ public class GatewayService {
    * @param id Id of the trip
    */
   public void deleteTrip(int id){
+    try{
+      passengersProxy.removeAllPassengersFromTrip(id);
+    }catch(ResponseStatusException e){
+      if(!e.getStatus().equals(HttpStatus.NOT_FOUND)) throw e;
+    }
     tripsProxy.deleteOne(id);
   }
 
@@ -116,11 +125,14 @@ public class GatewayService {
 
   /**
    * Adds a passenger to a trip
-   * @param tripId Id of the trip
+   * @param trip the trip
    * @param passengerId Id of the passenger
    */
-  public void addPassengerToATrip(int tripId, int passengerId){
-    passengersProxy.addPassengerToATrip(tripId, passengerId).getBody();
+  public void addPassengerToATrip(Trip trip, int passengerId){
+    User user = usersProxy.getOneById(passengerId);
+    String notifMessage = user.getFirstname() + " " + user.getLastname() + " veut rejoindre votre voyage";
+    passengersProxy.addPassengerToATrip(trip.getId(), passengerId).getBody();
+    notificationProxy.createOne(new NewNotification(trip.getDriverId(), trip.getId(), LocalDate.now(), notifMessage));
   }
 
   /**
@@ -144,8 +156,16 @@ public class GatewayService {
     return passengersProxy.getPassengerStatus(tripId, userId);
   }
 
-  public void updatePassengerStatus(int tripId, int userId, String status){
-    passengersProxy.updatePassengerStatus(tripId, userId, status);
+  public void updatePassengerStatus(int tripId, int passengerId, String status){
+    passengersProxy.updatePassengerStatus(tripId, passengerId, status);
+    String messageNotif;
+    if(status.equals("accepted")){
+      messageNotif = "Votre demande de voyage a été acceptée";
+    }
+    else {
+      messageNotif = "Votre demande de voyage a été refusée";
+    }
+    notificationProxy.createOne(new NewNotification(passengerId, tripId, LocalDate.now(), messageNotif));
   }
 
   /**
@@ -157,26 +177,16 @@ public class GatewayService {
     passengersProxy.removePassengerFromTrip(tripId, passengerId);
   }
 
-  /**
-   * Deletes all passengers from a trip
-   * @param tripId Id of the trip
-   */
-  public void removeAllPassengersFromTrip(int tripId){
-    passengersProxy.removeAllPassengersFromTrip(tripId);
-  }
-
-
-
-  public Notification createNotification(NewNotification newNotification){
-    return notificationProxy.createOne(newNotification).getBody();
-  }
-
   public Iterable<Trip> getDriverTrips(int id){
     return tripsProxy.getDriverTrips(id);
   }
 
   public PassengerTrips getPassengerTrips(int id){
     return tripsProxy.getPassengerTrips(id);
+  }
+
+  public Iterable<Trip> getAllTripsWithSearchQuery(LocalDate departureDate, Double originLat, Double originLon, Double destinationLat, Double destinationLon){
+    return tripsProxy.getAll(departureDate, originLat, originLon, destinationLat, destinationLon);
   }
 
 

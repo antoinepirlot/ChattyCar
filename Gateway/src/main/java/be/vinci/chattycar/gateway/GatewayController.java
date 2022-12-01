@@ -1,6 +1,7 @@
 package be.vinci.chattycar.gateway;
 
 import be.vinci.chattycar.gateway.models.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,14 +47,14 @@ public class GatewayController {
   }
 
   @GetMapping("/users/{id}")
-  User getOneUserById(@PathVariable int id, @RequestHeader("Authorization") String token){
+  User getOneUserById(@PathVariable Integer id, @RequestHeader("Authorization") String token){
     service.verifyToken(token);
     return service.getUserById(id);
   }
 
   @PutMapping("/users/{id}")
-  void updateOneUser(@PathVariable int id, @RequestBody User user, @RequestHeader("Authorization") String token){
-    if(hasUserNotCorrectFields(user) || id != user.getId()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+  void updateOneUser(@PathVariable Integer id, @RequestBody User user, @RequestHeader("Authorization") String token){
+    if(hasUserNotCorrectFields(user) || !user.getId().equals(id)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     service.getUserById(id);
     String emailFromToken = service.verifyToken(token);
     if(!emailFromToken.equals(user.getEmail())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
@@ -61,49 +62,49 @@ public class GatewayController {
   }
 
   @DeleteMapping("/users/{id}")
-  void deleteOneUser(@PathVariable int id, @RequestHeader("Authorization") String token){
+  void deleteOneUser(@PathVariable Integer id, @RequestHeader("Authorization") String token){
     String emailFromToken = service.verifyToken(token);
     //check if the email exists
     User userFromDB = service.getUserByEmail(emailFromToken);
 
-    if(userFromDB.getId() != id) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    if(!userFromDB.getId().equals(id)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     //TODO : supprimer tous les trips, etc.
 
     service.deleteUser(id);
   }
 
   @GetMapping("/users/{id}/driver")
-  Iterable<Trip> getDriverTrips(@PathVariable int id, @RequestHeader("Authorization") String token){
+  Iterable<Trip> getDriverTrips(@PathVariable Integer id, @RequestHeader("Authorization") String token){
     String email = service.verifyToken(token);
     User user = service.getUserByEmail(email);
     service.getUserById(id);
-    if(user.getId() != id) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    if(user.getId().equals(id)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     return service.getDriverTrips(id);
   }
 
   @GetMapping("/users/{id}/passenger")
-  PassengerTrips getPassengerTrips(@PathVariable int id, @RequestHeader("Authorization") String token){
+  PassengerTrips getPassengerTrips(@PathVariable Integer id, @RequestHeader("Authorization") String token){
     String email = service.verifyToken(token);
     User user = service.getUserByEmail(email);
     service.getUserById(id);
-    if(user.getId() != id) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    if(!user.getId().equals(id)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     return service.getPassengerTrips(id);
   }
 
   @GetMapping("/users/{id}/notifications")
-  Iterable<Notification> getNotificationsFromOneUser(@PathVariable int id, @RequestHeader("Authorization") String token){
+  Iterable<Notification> getNotificationsFromOneUser(@PathVariable Integer id, @RequestHeader("Authorization") String token){
     String emailFromToken = service.verifyToken(token);
     service.getUserById(id);
-    if(service.getUserByEmail(emailFromToken).getId() != id) throw new ResponseStatusException(
+    if(!service.getUserByEmail(emailFromToken).getId().equals(id)) throw new ResponseStatusException(
         HttpStatus.FORBIDDEN);
     return service.getAllNotificationsFromUser(id);
   }
 
   @DeleteMapping("/users/{id}/notifications")
-  void deleteAllNotificationsFromOneUser(@PathVariable int id, @RequestHeader("Authorization") String token){
+  void deleteAllNotificationsFromOneUser(@PathVariable Integer id, @RequestHeader("Authorization") String token){
     String emailFromToken = service.verifyToken(token);
     service.getUserById(id);
-    if(service.getUserByEmail(emailFromToken).getId() != id) throw new ResponseStatusException(
+    if(!service.getUserByEmail(emailFromToken).getId().equals(id)) throw new ResponseStatusException(
         HttpStatus.FORBIDDEN);
     service.deleteAllNotificationsFromUser(id);
   }
@@ -117,27 +118,36 @@ public class GatewayController {
     return service.createOneTrip(newTrip);
   }
 
+  @GetMapping("/trips")
+  Iterable<Trip> getAllTripsWithSearchQuery(
+          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate,
+          @RequestParam(required = false) Double originLat,
+          @RequestParam(required = false) Double originLon,
+          @RequestParam(required = false) Double destinationLat,
+          @RequestParam(required = false) Double destinationLon){
+    if((originLat == null && originLon != null ) ||
+       (originLat != null && originLon == null) ||
+       (destinationLat == null && destinationLon != null ) ||
+       (destinationLat != null && destinationLon == null)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    return service.getAllTripsWithSearchQuery(departureDate, originLat, originLon, destinationLat, destinationLon);
+  }
+
   @GetMapping("/trips/{id}")
-  Trip getOneTripById(@PathVariable int id){
+  Trip getOneTripById(@PathVariable Integer id){
     return service.getTripById(id);
   }
 
   @DeleteMapping("/trips/{id}")
-  void deleteOneTrip(@PathVariable int id, @RequestHeader("Authorization") String token){
+  void deleteOneTrip(@PathVariable Integer id, @RequestHeader("Authorization") String token){
     String email = service.verifyToken(token);
     User user = service.getUserByEmail(email);
     Trip trip = service.getTripById(id);
     if(!trip.getDriverId().equals(user.getId())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-    try{
-      service.removeAllPassengersFromTrip(id);
-    }catch(ResponseStatusException e){
-      if(!e.getStatus().equals(HttpStatus.NOT_FOUND)) throw e;
-    }
     service.deleteTrip(id);
   }
 
   @GetMapping("/trips/{id}/passengers")
-  Passengers getPassengersOfATripById(@PathVariable int id, @RequestHeader("Authorization") String token ){
+  Passengers getPassengersOfATripById(@PathVariable Integer id, @RequestHeader("Authorization") String token ){
     String email = service.verifyToken(token);
     User user = service.getUserByEmail(email);
     Trip trip = service.getTripById(id);
@@ -146,16 +156,14 @@ public class GatewayController {
   }
 
   @PostMapping("/trips/{trip_id}/passengers/{passenger_id}")
-  void addPassengerToATrip(@PathVariable("trip_id") int tripId, @PathVariable("passenger_id") int passengerId,
+  void addPassengerToATrip(@PathVariable("trip_id") Integer tripId, @PathVariable("passenger_id") Integer passengerId,
                            @RequestHeader("Authorization") String token){
     String email = service.verifyToken(token);
     service.getUserById(passengerId);
     User user = service.getUserByEmail(email);
-    if(passengerId != user.getId()) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    if(passengerId.equals(user.getId())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     Trip trip = service.getTripById(tripId);
-    String notifMessage = user.getFirstname() + " " + user.getLastname() + " veut rejoindre votre voyage";
-    service.addPassengerToATrip(tripId, passengerId);
-    service.createNotification(new NewNotification(trip.getDriverId(), tripId, LocalDate.now(), notifMessage));
+    service.addPassengerToATrip(trip, passengerId);
   }
 
   @GetMapping("/trips/{tripId}/passengers/{passengerId}")
@@ -178,14 +186,7 @@ public class GatewayController {
     Trip trip = service.getTripById(tripId);
     if(!service.getUserByEmail(email).getId().equals(trip.getDriverId())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     service.updatePassengerStatus(tripId, passengerId, status);
-    String messageNotif;
-    if(status.equals("accepted")){
-      messageNotif = "Votre demande de voyage a été acceptée";
-    }
-    else {
-      messageNotif = "Votre demande de voyage a été refusée";
-    }
-    service.createNotification(new NewNotification(passengerId, tripId, LocalDate.now(), messageNotif));
+
   }
 
   @DeleteMapping("/trips/{trip_id}/passengers/{user_id}")
