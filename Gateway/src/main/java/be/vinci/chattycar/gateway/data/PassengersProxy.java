@@ -19,7 +19,7 @@ public interface PassengersProxy {
     Passengers getAllPassengersFromATrip(@PathVariable("trip_id") Integer tripId);
 
     @PostMapping("/passengers/{trip_id}/user/{user_id}")
-    ResponseEntity<NoIdPassenger> addPassengerToATrip(@PathVariable("trip_id") int tripId, @PathVariable("user_id") int userId );
+    ResponseEntity<NoIdPassenger> addPassengerToATrip(@PathVariable("trip_id") Integer tripId, @PathVariable("user_id") Integer userId );
 
     @PutMapping("/passengers/{id}")
     void updatePassenger(@PathVariable int id, @RequestBody Passengers passenger);

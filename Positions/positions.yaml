@@ -1,0 +1,51 @@
+openapi: 3.0.3
+info:
+  title: Chatty Car Ride Sharing Service Poisitions API
+  description: API for the positions service of Chatty Car, the ride sharing app.
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:9006'
+    description: dev server
+
+paths:
+  /positions:
+    get:
+      summary: Get the distance between 2 positions
+      parameters:
+        - name: startLong
+          description: start latitude position
+          in: query
+          required: true
+          schema:
+            type: string
+            example: 50.845275
+        - name: endLong
+          description: end latitude position
+          in: query
+          required: true
+          schema: 
+            type: string
+            example: 52.354875
+        - name: startLat
+          description: start longitude position
+          in: query
+          required: true
+          schema:
+            type: string
+            example: 54.254769
+        - name: endLat
+          description: end longitude position
+          in: query
+          required: true
+          schema:
+            type: string
+            example: 45.253698
+      responses:
+        200:
+          description: Sent the distance between the two positions
+          content:
+            'application/json':
+              schema:
+                type: integer
+        400:
+          description: Both latitude and longitude should be specified for a position query

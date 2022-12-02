@@ -1,0 +1,262 @@
+openapi: 3.0.3
+info:
+  title: ChattyCars passengers service
+  description: Microservice handling passengers database in ChattyCars project
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:9003'
+    description: Development server
+paths:
+
+  /passengers/{trip_id}:
+    parameters:
+      - name: trip_id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 1
+        description: id of the trip
+    get:
+      summary: Get list of passengers of a trip, with pending, accepted and refused status
+      responses:
+        200:
+          description: Sent list of passengers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/passengers'
+    delete:
+      summary: Delete all passengers of a trip
+      responses:
+        404:
+          description: No trip found with this ID
+        200:
+          description: Trip's passengers are deleted
+
+
+  /passengers/{trip_id}/user/{user_id}:
+    parameters:
+      - name: trip_id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 1
+        description: id of the trip
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 1
+        description: id of the user
+    post:
+      summary: Add user as passenger to a trip with pending status (create passenger)
+      responses:
+        201:
+          description: User added as pending passenger
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/passenger'
+        400:
+          description: User is already a passenger, or the ride has no available seating left
+        404:
+          description: Trip or user not found
+        500:
+          description: internal server error
+    get:
+      summary: Get passenger status
+      responses:
+        200:
+          description: Send passenger status
+          content:
+            'text/plain':
+              schema:
+                type: string
+                enum:
+                  - pending
+                  - accepted
+                  - refused
+        404:
+          description: Trip or user not found
+    put:
+      summary: Update passenger status
+      parameters:
+        - name: status
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - accepted
+              - refused
+      responses:
+        400:
+          description: User is not a passenger, or is not in pending status, or status not in accepted value
+        201:
+          description: Status is updated
+    delete:
+      summary: Remove user from passengers of a trip
+      responses:
+        200:
+          description: User removed from passenger
+        400:
+          description: User is not a passenger
+
+  /passengers/user/{user_id}:
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+          description: is of the passenger
+      get:
+        summary: Get all trips of a passenger
+        responses:
+          200:
+            description:  Get list of trips of a passenger, with pending, accepted and refused status
+            content:
+              'application/json':
+                schema:
+                  $ref: '#/components/schemas/passenger_trips'
+      delete:
+        summary: Delete all trips of a passenger
+        responses:
+          404:
+            description: No passenger found with this ID
+          200:
+            description: Passenger's trips are deleted
+
+components:
+  schemas:
+    passenger:
+      type: object
+      properties:
+        id:
+          type: integer
+        trip_id:
+          type: integer
+        user_id:
+          type: integer
+        status:
+          type: string
+          enum:
+            - pending
+            - accepted
+            - refused
+      example:
+        id: 1
+        trip_id: 1
+        passenger_id: 1
+        status: accepted
+
+    no_id_passenger:
+      type: object
+      properties:
+        trip_id:
+          type: integer
+        user_id:
+          type: integer
+        status:
+          type: string
+          enum:
+            - pending
+            - accepted
+            - refused
+      example:
+        trip_id: 1
+        passenger_id: 1
+        status: accepted
+
+    passengers:
+      type: object
+      properties:
+        pending:
+          type: array
+          items:
+            $ref: '#/components/schemas/user'
+        accepted:
+          type: array
+          items:
+            $ref: '#/components/schemas/user'
+        refused:
+          type: array
+          items:
+            $ref: '#/components/schemas/user'
+
+    passenger_trips:
+      type: object
+      properties:
+        pending:
+          type: array
+          items:
+            $ref: '#/components/schemas/trip'
+        accepted:
+          type: array
+          items:
+            $ref: '#/components/schemas/trip'
+        refused:
+          type: array
+          items:
+            $ref: '#/components/schemas/trip'
+
+    position:
+      type: object
+      properties:
+        latitude:
+          type: number
+        longitude:
+          type: number
+      example:
+        latitude: 43.727421
+        longitude: 3.727421
+
+    trip:
+      type: object
+      properties:
+        id:
+          type: integer
+        origin:
+          $ref: '#/components/schemas/position'
+        destination:
+          $ref: '#/components/schemas/position'
+        departure:
+          type: string
+          description: Date in ISO 8601, YYYY-MM-DD
+        driver_id:
+          type: integer
+        available_seating:
+          type: integer
+      example:
+        id: 22
+        origin:
+          latitude: 43.727421
+          longitude: 3.727421
+        destination:
+          latitude: 43.727421
+          longitude: 3.727421
+        departure: 2023-02-28 08:23:30
+        driver_id: 1
+        available_seating: 1
+
+    user:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+      example:
+        id: 1
+        email: zoe.levaux@student.vinci.be
+        firstname: Zoé
+        lastname: Levaux
+
