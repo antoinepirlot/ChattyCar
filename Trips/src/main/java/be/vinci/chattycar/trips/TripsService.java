@@ -154,11 +154,7 @@ public class TripsService {
    * @param trip the trip to remove
    */
   public void deleteOne(Trip trip) {
-    try {
-      this.repository.delete(trip);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+    this.repository.delete(trip);
   }
 
   /**
