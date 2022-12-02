@@ -55,7 +55,7 @@ public class TripsService {
     Position position = new Position();
     position.setLongitude(longitude);
     position.setLatitude(latitude);
-    List<Trip> trips = null;
+    List<Trip> trips;
     if (origin) {
       trips =  this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsOrderByIdDesc(0, position);
     } else {
@@ -100,7 +100,7 @@ public class TripsService {
     Position position = new Position();
     position.setLongitude(longitude);
     position.setLatitude(latitude);
-    List<Trip> trips = null;
+    List<Trip> trips;
     if (origin) {
       trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndOriginEqualsOrderByIdDesc(0, departureDate, position);
     } else {
