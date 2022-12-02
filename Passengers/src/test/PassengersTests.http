@@ -1,0 +1,28 @@
+### Get list of passengers of a trip, with pending, accepted and refused status
+GET http://localhost:9003/passengers/1
+
+### Delete all passengers of a trip
+DELETE http://localhost:9003/passengers/1
+
+### Add user as passenger to a trip with pending status (create passenger)
+POST http://localhost:9003/passengers/1/user/1
+
+### Get passenger status
+GET http://localhost:9003/passengers/1/user/1
+
+### Update passenger status
+PUT http://localhost:9003/passengers/1/user/1
+Content-Type: application/json
+
+{
+  "status": "accepted"
+}
+
+### Remove user from passengers of a trip
+DELETE http://localhost:9003/passengers/1/user/1
+
+###Get all trips of a passenger
+GET http://localhost:9003/passengers/user/1
+
+### Delete all trips of a passenger
+DELETE http://localhost:9003/passengers/user/1

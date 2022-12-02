@@ -9,11 +9,14 @@ import be.vinci.chattycar.passengers.models.PassengerTrips;
 import be.vinci.chattycar.passengers.models.Passengers;
 import be.vinci.chattycar.passengers.models.Trip;
 import be.vinci.chattycar.passengers.models.User;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class PassengersService {
   private final PassengersRepository repository;
   private final TripsProxy tripsProxy;
@@ -33,7 +36,7 @@ public class PassengersService {
    */
   public Passengers getPassengers(Integer tripId) {
     List<Passenger> passengerList = repository.getAllPassengersByTripId(tripId);
-    if(passengerList == null || passengerList.isEmpty()) return null;
+  if(passengerList == null || passengerList.isEmpty()) return new Passengers(new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
     List<User> accepted = passengerList.stream()
         .filter(passenger -> passenger.getStatus().equals("accepted"))
@@ -56,6 +59,7 @@ public class PassengersService {
    * @param tripId id of the trip
    * @return True if the passenger of a trip were deleted, false if it couldn't be found
    */
+  @Transactional
   public boolean deleteOne(Integer tripId) {
     if (!repository.existsByTripId(tripId)) return false;
     repository.deleteByTripId(tripId);
@@ -68,6 +72,7 @@ public class PassengersService {
    * @param userId id of the user
    * @return The passenger created with its id, or null if it already existed
    */
+  @Transactional
   public Passenger createOne(Integer tripId, Integer userId) {
     if (repository.existsByUserIdAndTripId(tripId, userId)) return null;
     return repository.save(new Passenger(-1, tripId, userId, "pending"));
@@ -79,8 +84,9 @@ public class PassengersService {
    * @param userId id of the user
    * @return The passenger status or null if the passenger is not present
    */
-  public String getPassengerStatus(long tripId, long userId) {
+  public String getPassengerStatus(Integer tripId, Integer userId) {
     Optional<Passenger> p = repository.findByUserIdAndTripId(tripId, userId);
+    System.out.println(p);
     if (p.isEmpty()) return null;
     return p.get().getStatus();
   }
@@ -91,11 +97,19 @@ public class PassengersService {
    * @param userId id of the user
    * @return True if the inscription was updated, or null if it couldn't be found
    */
+  @Transactional
   public boolean updateOne(Integer tripId, Integer userId, String status) {
-    if(!repository.existsByUserIdAndTripId(userId, tripId) || !repository.findByUserIdAndTripId(tripId, userId).get().getStatus().equals("pending")
-        || !(status.equals("accepted") || status.equals("refused"))) return false;
-    repository.save(new Passenger(-1, tripId, userId, "pending"));
-    return true;
+    Optional<Passenger> optionalPassenger = repository.findByUserIdAndTripId(tripId, userId);
+
+    System.out.println(optionalPassenger);
+    if (optionalPassenger.isPresent()) {
+      Passenger passenger = optionalPassenger.get();
+      if (passenger.getStatus().equals("pending")) {
+          passenger.setStatus(status);
+          return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -104,6 +118,7 @@ public class PassengersService {
    * @param userId id of the user
    * @return True if the review was deleted, false if it couldn't be found
    */
+  @Transactional
   public boolean deleteOne(Integer tripId, Integer userId) {
     if(!repository.existsByUserIdAndTripId(tripId, userId)) return false;
     repository.deleteByUserIdAndTripId(tripId, userId);
@@ -117,8 +132,8 @@ public class PassengersService {
    */
   public PassengerTrips getTrips(Integer userId) {
     List<Passenger> passengerList =  repository.getAllPassengersByUserId(userId);
-
-    if(passengerList == null || passengerList.isEmpty()) return null;
+    System.out.println(passengerList);
+    if(passengerList == null || passengerList.isEmpty()) return new PassengerTrips(new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
     List<Trip> accepted = passengerList.stream()
         .filter(passenger -> passenger.getStatus().equals("accepted"))
@@ -139,6 +154,7 @@ public class PassengersService {
    * Deletes all trips from a user
    * @param userId id of the user
    */
+  @Transactional
   public boolean deleteTripsFromPassenger(Integer userId) throws UserNotFound404Exception {
     if(!repository.existsByUserId(userId)) return false;
     repository.deleteByUserId(userId);
