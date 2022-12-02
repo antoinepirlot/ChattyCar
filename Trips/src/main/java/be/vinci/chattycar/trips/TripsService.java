@@ -139,6 +139,13 @@ public class TripsService {
     );
   }
 
+  /**
+   * Sort trips by distance between the trip's origin or destination with the specified destination or origin.
+   * @param trips the list of trips to sort
+   * @param position the origin or destination to calculate the distance from the destination or origin of the trip
+   * @param origin true if the param position is the origin, false if the param position is the destination
+   * @return the sorted trips by distance
+   */
   private List<Trip> sortByDistance(List<Trip> trips, Position position, boolean origin) {
     Stream<Trip> stream = trips.stream();
     if (origin) {
