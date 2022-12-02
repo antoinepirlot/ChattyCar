@@ -56,6 +56,24 @@ POST http://localhost:9005/trips
 Content-Type: application/json
 
 {
+"origin": {
+"latitude": 52.142598,
+"longitude": 8.548796
+},
+"destination": {
+"latitude": 2.849372,
+"longitude": 8.451009
+},
+"departure": "2022-10-25",
+"driver_id": 12,
+"available_seating": 2
+}
+
+###
+POST http://localhost:9005/trips
+Content-Type: application/json
+
+{
   "origin": {
     "latitude": 52.142598,
     "longitude": 8.548796

@@ -72,7 +72,7 @@ public class TripsService {
     origin.setLatitude(originLat);
     destination.setLongitude(destinationLon);
     destination.setLatitude(destinationLat);
-    List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsAndDestinationEquals(0, origin, destination);
+    List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThan(0);
     return this.sortByDistance(trips, origin, destination);
   }
 
@@ -115,7 +115,7 @@ public class TripsService {
     origin.setLatitude(originLat);
     destination.setLongitude(destinationLon);
     destination.setLatitude(destinationLat);
-    List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndOriginEqualsAndDestinationEquals(0, departureDate, origin, destination);
+    List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEquals(0, departureDate);
     return this.sortByDistance(trips, origin, destination);
   }
 
