@@ -36,7 +36,7 @@ public class PassengersService {
    */
   public Passengers getPassengers(Integer tripId) {
     List<Passenger> passengerList = repository.getAllPassengersByTripId(tripId);
-  if(passengerList == null || passengerList.isEmpty()) return new Passengers(new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+    if(passengerList == null || passengerList.isEmpty()) return new Passengers(new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
     List<User> accepted = passengerList.stream()
         .filter(passenger -> passenger.getStatus().equals("accepted"))
