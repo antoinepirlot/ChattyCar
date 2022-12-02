@@ -14,7 +14,6 @@ public class NewUser {
     private String password;
 
     public Credentials getCredentials() {
-        Credentials credentials = new Credentials(email, password);
-        return credentials;
+        return new Credentials(email, password);
     }
 }

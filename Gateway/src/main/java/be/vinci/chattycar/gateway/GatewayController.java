@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @CrossOrigin(origins = { "http://localhost:80" })
 @RestController
@@ -54,9 +53,9 @@ public class GatewayController {
 
   @PutMapping("/users/{id}")
   void updateOneUser(@PathVariable Integer id, @RequestBody User user, @RequestHeader("Authorization") String token){
+    String emailFromToken = service.verifyToken(token);
     if(hasUserNotCorrectFields(user) || !user.getId().equals(id)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     service.getUserById(id);
-    String emailFromToken = service.verifyToken(token);
     if(!emailFromToken.equals(user.getEmail())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     service.updateUser(user);
   }

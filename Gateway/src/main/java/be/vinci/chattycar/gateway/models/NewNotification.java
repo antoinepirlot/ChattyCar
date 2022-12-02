@@ -20,7 +20,4 @@ public class NewNotification {
   @JsonProperty("notification_text")
   private String notificationText;
 
-  public Notification toNotification() {
-    return new Notification(0, userId, tripId, date, notificationText);
-  }
 }
