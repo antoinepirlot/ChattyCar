@@ -196,22 +196,47 @@ public class GatewayController {
     service.removePassengerFromTrip(tripId, passengerId);
   }
 
+  /**
+   * Verify if an email is valid or not
+   * @param email the email to analyze
+   * @return true if email is valid false otherwise
+   */
   private boolean isEmailValid(String email){
     return email.trim().length() != 0 && email.contains("@");
   }
 
+  /**
+   * Verify if a string is empty or not
+   * @param string the string to analyze
+   * @return true if string is empty false otherwise
+   */
   private boolean isStringEmpty(String string){
     return string.trim().length() == 0;
   }
 
-  private boolean isCredentialsValid(Credentials insecureCredentials){
-    return isEmailValid(insecureCredentials.getEmail()) && !isStringEmpty(insecureCredentials.getPassword());
+  /**
+   * Verify if credentials is valid or not
+   * @param credentials the credentials to analyze
+   * @return true if credentials is valid false otherwise
+   */
+  private boolean isCredentialsValid(Credentials credentials){
+    return isEmailValid(credentials.getEmail()) && !isStringEmpty(credentials.getPassword());
   }
 
+  /**
+   * Verify if position is valid or not
+   * @param position the position to analyze
+   * @return true if position is valid false otherwise
+   */
   private boolean isPositionValid(Position position){
     return position.getLatitude() != null && position.getLongitude() != null;
   }
 
+  /**
+   * Verify if the user has at least one not correct field
+   * @param user the user to analyze
+   * @return true if user has at least one not correct field false otherwise
+   */
   private boolean hasUserNotCorrectFields(User user){
     return !isEmailValid(user.getEmail()) ||
             isStringEmpty(user.getLastname()) ||
@@ -219,6 +244,11 @@ public class GatewayController {
             user.getId() == null;
   }
 
+  /**
+   * Verify if the new user has at least one not correct field
+   * @param newUser the user to analyze
+   * @return true if new user has at least one not correct field false otherwise
+   */
   private boolean hasNewUserNotCorrectFields(NewUser newUser){
     return !isEmailValid(newUser.getEmail()) ||
             !isCredentialsValid(newUser.getCredentials()) ||
@@ -227,6 +257,11 @@ public class GatewayController {
             isStringEmpty(newUser.getPassword());
   }
 
+  /**
+   * Verify if the new trip has at least one not correct field
+   * @param newTrip the user to analyze
+   * @return true if new trip has at least one not correct field false otherwise
+   */
   private boolean hasNewTripNotCorrectFields(NewTrip newTrip){
     return newTrip.getDeparture() == null ||
             newTrip.getAvailableSeating() == null ||
@@ -234,6 +269,4 @@ public class GatewayController {
             !isPositionValid(newTrip.getOrigin()) ||
             !isPositionValid(newTrip.getDestination());
   }
-
-
 }
