@@ -14,7 +14,7 @@ POST http://localhost:9000/users
 Content-Type: application/json
 
 {
-  "email": "zose@gmail.com",
+  "email": "zoe@gmail.com",
   "firstname": "zoe",
   "lastname": "levaux",
   "password": "123password321"
@@ -51,7 +51,7 @@ Content-Type: application/json
  %}
 
 ### get user by id
-GET http://localhost:9000/users/3
+GET http://localhost:9000/users/2
 Authorization: {{userToken}}
 
 ### update user password
