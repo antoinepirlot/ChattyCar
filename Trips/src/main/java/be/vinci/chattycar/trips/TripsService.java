@@ -8,6 +8,7 @@ import be.vinci.chattycar.trips.models.PassengerTrips;
 import be.vinci.chattycar.trips.models.Position;
 import be.vinci.chattycar.trips.models.Trip;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -57,9 +58,9 @@ public class TripsService {
     position.setLatitude(latitude);
     List<Trip> trips;
     if (origin) {
-      trips =  this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsOrderByIdDesc(0, position);
+      trips =  this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsOrderByOrigin(0, position);
     } else {
-      trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDestinationEqualsOrderByIdDesc(0, position);
+      trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDestinationEqualsOrderByDestination(0, position);
     }
     return trips.stream().limit(LIST_LIMIT).toList();
   }
@@ -73,8 +74,7 @@ public class TripsService {
     destination.setLatitude(destinationLat);
     List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsAndDestinationEqualsOrderByIdDesc(0, origin, destination);
     trips = trips.stream().limit(LIST_LIMIT).toList();
-    //TODO sort by distance
-    return trips;
+    return this.sortByDistance(trips);
   }
 
   /**
@@ -102,9 +102,9 @@ public class TripsService {
     position.setLatitude(latitude);
     List<Trip> trips;
     if (origin) {
-      trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndOriginEqualsOrderByIdDesc(0, departureDate, position);
+      trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndOriginEqualsOrderByOrigin(0, departureDate, position);
     } else {
-      trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndDestinationEqualsOrderByIdDesc(
+      trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndDestinationEqualsOrderByDestination(
           0, departureDate, position);
     }
     return trips.stream().limit(LIST_LIMIT).toList();
@@ -119,10 +119,7 @@ public class TripsService {
     destination.setLatitude(destinationLat);
     List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndOriginEqualsAndDestinationEqualsOrderByIdDesc(0, departureDate, origin, destination);
     trips = trips.stream().limit(LIST_LIMIT).toList();
-    //TODO sort by distance
-    int distance = this.getDistance(origin, destination);
-    System.out.println(distance);
-    return trips;
+    return this.sortByDistance(trips);
   }
 
   /**
@@ -138,6 +135,13 @@ public class TripsService {
         origin.getLatitude(),
         destination.getLatitude()
     );
+  }
+
+  private List<Trip> sortByDistance(List<Trip> trips) {
+    //Pas compris ce qui était demandé sur le point: "Both origin and destination queries will order by sum of distances."
+    return trips.stream()
+        .sorted(Comparator.comparing(trip -> this.getDistance(trip.getOrigin(), trip.getDestination())))
+        .toList();
   }
 
   /**
