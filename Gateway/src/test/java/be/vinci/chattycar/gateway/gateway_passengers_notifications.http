@@ -94,7 +94,7 @@ Authorization: {{userTokenZoe}}
 
 ### Update passenger status
 PUT http://localhost:9000/trips/1/passengers/2?status=accepted
-Authorization: {{userTokenZoe}}
+Authorization: {{userToken}}
 
 ### Delete a passenger from a trip
 DELETE http://localhost:9000/trips/1/passengers/2

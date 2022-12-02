@@ -74,7 +74,7 @@ public class GatewayController {
     String email = service.verifyToken(token);
     User user = service.getUserByEmail(email);
     service.getUserById(id);
-    if(user.getId().equals(id)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    if(!user.getId().equals(id)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     return service.getDriverTrips(id);
   }
 
@@ -157,9 +157,10 @@ public class GatewayController {
     String email = service.verifyToken(token);
     service.getUserById(passengerId);
     User user = service.getUserByEmail(email);
-    if(passengerId.equals(user.getId())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    if(!passengerId.equals(user.getId())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     Trip trip = service.getTripById(tripId);
     service.addPassengerToATrip(trip, passengerId);
+
   }
 
   @GetMapping("/trips/{tripId}/passengers/{passengerId}")
@@ -170,7 +171,6 @@ public class GatewayController {
     Trip trip = service.getTripById(tripId);
     service.getUserById(passengerId);
     if(!user.getId().equals(passengerId) && !trip.getDriverId().equals(passengerId)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-
     return service.getPassengerStatus(tripId, passengerId);
   }
 
@@ -182,7 +182,6 @@ public class GatewayController {
     Trip trip = service.getTripById(tripId);
     if(!service.getUserByEmail(email).getId().equals(trip.getDriverId())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     service.updatePassengerStatus(tripId, passengerId, status);
-
   }
 
   @DeleteMapping("/trips/{trip_id}/passengers/{user_id}")

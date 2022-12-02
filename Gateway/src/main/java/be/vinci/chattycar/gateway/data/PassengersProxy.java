@@ -28,8 +28,8 @@ public interface PassengersProxy {
     String getPassengerStatus(@PathVariable("trip_id") int tripId, @PathVariable("user_id") int userId);
 
     @PutMapping("/passengers/{trip_id}/user/{user_id}")
-    ResponseEntity<Void> updatePassengerStatus(@PathVariable("trip_id") int tripId,
-        @PathVariable("user_id") int userId, @RequestParam("status") String status);
+    ResponseEntity<Void> updatePassengerStatus(@PathVariable("trip_id") Integer tripId,
+        @PathVariable("user_id") Integer userId, @RequestParam("status") String status);
 
     @DeleteMapping("/passengers/{trip_id}/user/{user_id}")
     void removePassengerFromTrip(@PathVariable("trip_id") int tripId, @PathVariable("user_id") int userId);
