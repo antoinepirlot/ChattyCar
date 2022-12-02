@@ -9,7 +9,7 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Repository
-public interface PassengersRepository extends CrudRepository<Passenger, Long> {
+public interface PassengersRepository extends CrudRepository<Passenger, Integer> {
 
   boolean existsByUserIdAndTripId(Integer tripId, Integer userId);
   boolean existsByTripId(Integer tripId);
