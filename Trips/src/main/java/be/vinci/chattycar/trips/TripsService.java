@@ -8,7 +8,6 @@ import be.vinci.chattycar.trips.models.PassengerTrips;
 import be.vinci.chattycar.trips.models.Position;
 import be.vinci.chattycar.trips.models.Trip;
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 import org.springframework.stereotype.Service;
@@ -74,9 +73,7 @@ public class TripsService {
     destination.setLongitude(destinationLon);
     destination.setLatitude(destinationLat);
     List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsAndDestinationEquals(0, origin, destination);
-    trips = trips.stream().limit(LIST_LIMIT).toList();
-    //TODO
-    return trips;
+    return this.sortByDistance(trips, origin, destination);
   }
 
   /**
@@ -119,9 +116,7 @@ public class TripsService {
     destination.setLongitude(destinationLon);
     destination.setLatitude(destinationLat);
     List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndOriginEqualsAndDestinationEquals(0, departureDate, origin, destination);
-    trips = trips.stream().limit(LIST_LIMIT).toList();
-    //TODO
-    return trips;
+    return this.sortByDistance(trips, origin, destination);
   }
 
   /**
@@ -152,28 +147,38 @@ public class TripsService {
       stream = stream.sorted((t1, t2) -> {
             int t1Distance = this.getDistance(position, t1.getDestination());
             int t2Distance = this.getDistance(position, t2.getDestination());
-            if (t1Distance > t2Distance) {
-              return 1;
-            }
-            if (t1Distance == t2Distance) {
-              return 0;
-            }
-            return -1;
-          });
+        return Integer.compare(t1Distance, t2Distance);
+      });
     } else {
       stream = stream.sorted((t1, t2) -> {
             int t1Distance = this.getDistance(t1.getOrigin(), position);
             int t2Distance = this.getDistance(t2.getOrigin(), position);
-            if (t1Distance > t2Distance) {
-              return 1;
-            }
-            if (t1Distance == t2Distance) {
-              return 0;
-            }
-            return -1;
-          });
+        return Integer.compare(t1Distance, t2Distance);
+      });
     }
     return stream.limit(LIST_LIMIT).toList();
+  }
+
+  /**
+   * Sort trips by the sum of the first distance and the second distance.
+   * The first distance is the trip's origin to the specified destination.
+   * The second distance is the specified origin to the trip's distance.
+   * @param trips the list of trips to sort
+   * @param origin the specified origin
+   * @param destination the specified destination
+   * @return the sorted list of trips
+   */
+  private List<Trip> sortByDistance(List<Trip> trips, Position origin, Position destination) {
+    return trips.stream()
+        .sorted((t1, t2) -> {
+          int t1SumDist = this.getDistance(t1.getOrigin(), destination)
+              + this.getDistance(origin, t1.getDestination());
+          int t2SumDist = this.getDistance(t2.getOrigin(), destination)
+              + this.getDistance(origin, t2.getDestination());
+          return Integer.compare(t1SumDist, t2SumDist);
+        })
+        .limit(LIST_LIMIT)
+        .toList();
   }
 
   /**
