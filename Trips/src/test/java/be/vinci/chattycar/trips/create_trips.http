@@ -10,7 +10,7 @@ Content-Type: application/json
     "latitude": 50.849372,
     "longitude": 4.451009
   },
-  "departure": "2022-10-25",
+  "departure": "2023-10-25",
   "driver_id": 12,
   "available_seating": 2
 }
