@@ -172,7 +172,7 @@ public class GatewayService {
   public void addPassengerToATrip(Trip trip, int passengerId){
     User user = usersProxy.getOneById(passengerId);
     String notifMessage = user.getFirstname() + " " + user.getLastname() + " veut rejoindre votre voyage";
-    passengersProxy.addPassengerToATrip(trip.getId(), passengerId);
+    passengersProxy.addPassengerToATrip(trip.getId(), passengerId).getBody();
     notificationProxy.createOne(new NewNotification(trip.getDriverId(), trip.getId(), LocalDate.now(), notifMessage));
   }
 
