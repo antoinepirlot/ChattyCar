@@ -1,6 +1,6 @@
 package be.vinci.chattycar.passengers;
 
-import be.vinci.chattycar.passengers.exceptions.PassengerExists400Exception;
+import be.vinci.chattycar.passengers.exceptions.PassengerExists409Exception;
 import be.vinci.chattycar.passengers.exceptions.PassengerNotFound404Exception;
 import be.vinci.chattycar.passengers.exceptions.TripNotFound404Exception;
 import be.vinci.chattycar.passengers.exceptions.UserNotFound404Exception;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -55,14 +54,14 @@ public class PassengersController {
    * @param tripId id of the trip
    * @param userId id of the user
    * @return 201 if User added as pending passenger or throws an error
-   * @throws PassengerExists400Exception if the passenger does not exist
+   * @throws PassengerExists409Exception if the passenger does not exist
    */
   @PostMapping("/passengers/{trip_id}/user/{user_id}")
   public ResponseEntity<NoIdPassenger> createOne(@PathVariable("trip_id") Integer tripId,
-      @PathVariable("user_id") Integer userId) throws PassengerExists400Exception {
+      @PathVariable("user_id") Integer userId) throws PassengerExists409Exception {
     if (tripId < 0 || userId < 0) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     Passenger newPassenger = service.createOne(tripId, userId);
-    if(newPassenger == null) throw new PassengerExists400Exception();
+    if(newPassenger == null) throw new PassengerExists409Exception();
     return new ResponseEntity<>(newPassenger.removeId(), HttpStatus.CREATED);
   }
 
@@ -89,9 +88,10 @@ public class PassengersController {
    */
   @PutMapping("/passengers/{trip_id}/user/{user_id}")
   public void updatePassengerStatus(@PathVariable("trip_id") Integer tripId,
-      @PathVariable("user_id") Integer userId, @RequestBody(required = true) PassengerStatusUpdate passengerStatusUpdate) {
-    if (passengerStatusUpdate == null || (!passengerStatusUpdate.status().equals("accepted") && !passengerStatusUpdate.status().equals("refused"))
-        || !service.updateOne(tripId, userId, passengerStatusUpdate.status())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+      @PathVariable("user_id") Integer userId, @RequestParam(required = true) String passengerStatusUpdate) {
+    System.out.println(passengerStatusUpdate);
+    if (passengerStatusUpdate == null || (!passengerStatusUpdate.equals("accepted") && !passengerStatusUpdate.equals("refused"))
+        || !service.updateOne(tripId, userId, passengerStatusUpdate)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
      throw new ResponseStatusException(HttpStatus.CREATED);
   }
 
