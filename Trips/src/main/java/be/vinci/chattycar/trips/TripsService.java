@@ -10,6 +10,7 @@ import be.vinci.chattycar.trips.models.Trip;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -58,11 +59,11 @@ public class TripsService {
     position.setLatitude(latitude);
     List<Trip> trips;
     if (origin) {
-      trips =  this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsOrderByOrigin(0, position);
+      trips =  this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEquals(0, position);
     } else {
-      trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDestinationEqualsOrderByDestination(0, position);
+      trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDestinationEquals(0, position);
     }
-    return trips.stream().limit(LIST_LIMIT).toList();
+    return this.sortByDistance(trips, position, origin);
   }
 
   public List<Trip> getAll(double originLon, double originLat, double destinationLon, double destinationLat) {
@@ -72,9 +73,10 @@ public class TripsService {
     origin.setLatitude(originLat);
     destination.setLongitude(destinationLon);
     destination.setLatitude(destinationLat);
-    List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsAndDestinationEqualsOrderByIdDesc(0, origin, destination);
+    List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsAndDestinationEquals(0, origin, destination);
     trips = trips.stream().limit(LIST_LIMIT).toList();
-    return this.sortByDistance(trips);
+    //TODO
+    return trips;
   }
 
   /**
@@ -102,12 +104,11 @@ public class TripsService {
     position.setLatitude(latitude);
     List<Trip> trips;
     if (origin) {
-      trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndOriginEqualsOrderByOrigin(0, departureDate, position);
+      trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndOriginEquals(0, departureDate, position);
     } else {
-      trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndDestinationEqualsOrderByDestination(
-          0, departureDate, position);
+      trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndDestinationEquals(0, departureDate, position);
     }
-    return trips.stream().limit(LIST_LIMIT).toList();
+    return this.sortByDistance(trips, position, origin);
   }
 
   public List<Trip> getAll(LocalDate departureDate, double originLon, double originLat, double destinationLon, double destinationLat) {
@@ -117,9 +118,10 @@ public class TripsService {
     origin.setLatitude(originLat);
     destination.setLongitude(destinationLon);
     destination.setLatitude(destinationLat);
-    List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndOriginEqualsAndDestinationEqualsOrderByIdDesc(0, departureDate, origin, destination);
+    List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndOriginEqualsAndDestinationEquals(0, departureDate, origin, destination);
     trips = trips.stream().limit(LIST_LIMIT).toList();
-    return this.sortByDistance(trips);
+    //TODO
+    return trips;
   }
 
   /**
@@ -137,11 +139,34 @@ public class TripsService {
     );
   }
 
-  private List<Trip> sortByDistance(List<Trip> trips) {
-    //Pas compris ce qui était demandé sur le point: "Both origin and destination queries will order by sum of distances."
-    return trips.stream()
-        .sorted(Comparator.comparing(trip -> this.getDistance(trip.getOrigin(), trip.getDestination())))
-        .toList();
+  private List<Trip> sortByDistance(List<Trip> trips, Position position, boolean origin) {
+    Stream<Trip> stream = trips.stream();
+    if (origin) {
+      stream = stream.sorted((t1, t2) -> {
+            int t1Distance = this.getDistance(position, t1.getDestination());
+            int t2Distance = this.getDistance(position, t2.getDestination());
+            if (t1Distance > t2Distance) {
+              return 1;
+            }
+            if (t1Distance == t2Distance) {
+              return 0;
+            }
+            return -1;
+          });
+    } else {
+      stream = stream.sorted((t1, t2) -> {
+            int t1Distance = this.getDistance(t1.getOrigin(), position);
+            int t2Distance = this.getDistance(t2.getOrigin(), position);
+            if (t1Distance > t2Distance) {
+              return 1;
+            }
+            if (t1Distance == t2Distance) {
+              return 0;
+            }
+            return -1;
+          });
+    }
+    return stream.limit(LIST_LIMIT).toList();
   }
 
   /**
