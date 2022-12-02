@@ -20,7 +20,7 @@ public class Trip {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate departure;
     @JsonProperty("driver_id")
-    private int driverId;
+    private Integer driverId;
     @JsonProperty("available_seating")
     private int availableSeating;
 }

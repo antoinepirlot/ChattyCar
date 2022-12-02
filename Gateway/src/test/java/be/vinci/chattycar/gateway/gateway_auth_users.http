@@ -51,7 +51,7 @@ Content-Type: application/json
  %}
 
 ### get user by id
-GET http://localhost:9000/users/155555
+GET http://localhost:9000/users/1
 Authorization: {{userToken}}
 
 ### update user password
@@ -60,18 +60,22 @@ Content-Type: application/json
 Authorization: {{userToken}}
 
 {
-  "email": "ntyj@gmail.com",
+  "email": "nico@gmail.com",
   "password": "oncle22"
 }
 
-### update user password
-PUT http://localhost:9000/users/23
+### update user
+PUT http://localhost:9000/users/1
 Content-Type: application/json
 Authorization: {{userToken}}
 
 {
-  "id": 23,
+  "id": 1,
   "email": "nico@gmail.com",
   "firstname": "nicolas",
   "lastname": "dominique"
 }
+
+### delete user
+DELETE http://localhost:9000/users/1
+Authorization: {{userToken}}
