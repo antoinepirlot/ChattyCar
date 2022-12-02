@@ -18,6 +18,8 @@ public class TripsService {
   private final PositionsProxy positionsProxy;
   private final PassengersProxy passengersProxy;
 
+  private static final int LIST_LIMIT = 20;
+
   public TripsService(TripsRepository repository, PositionsProxy positionsProxy, PassengersProxy passengersProxy) {
     this.repository = repository;
     this.positionsProxy = positionsProxy;
@@ -38,7 +40,8 @@ public class TripsService {
    * @return the list of trips
    */
   public  List<Trip> getAll() {
-    return this.repository.getTripsByAvailableSeatingGreaterThanOrderByIdDesc(0);
+    List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanOrderByIdDesc(0);
+    return trips.stream().limit(LIST_LIMIT).toList();
   }
 
   /**
@@ -52,10 +55,13 @@ public class TripsService {
     Position position = new Position();
     position.setLongitude(longitude);
     position.setLatitude(latitude);
+    List<Trip> trips = null;
     if (origin) {
-      return this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsOrderByIdDesc(0, position);
+      trips =  this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsOrderByIdDesc(0, position);
+    } else {
+      trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDestinationEqualsOrderByIdDesc(0, position);
     }
-    return this.repository.getTripsByAvailableSeatingGreaterThanAndDestinationEqualsOrderByIdDesc(0, position);
+    return trips.stream().limit(LIST_LIMIT).toList();
   }
 
   public List<Trip> getAll(double originLon, double originLat, double destinationLon, double destinationLat) {
@@ -66,6 +72,7 @@ public class TripsService {
     destination.setLongitude(destinationLon);
     destination.setLatitude(destinationLat);
     List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanAndOriginEqualsAndDestinationEqualsOrderByIdDesc(0, origin, destination);
+    trips = trips.stream().limit(LIST_LIMIT).toList();
     //TODO sort by distance
     return trips;
   }
@@ -76,7 +83,9 @@ public class TripsService {
    * @return the list of trips matching departure date
    */
   public List<Trip> getAll(LocalDate departureDate) {
-    return this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsOrderByIdDesc(0, departureDate);
+    List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsOrderByIdDesc(0, departureDate);
+    trips = trips.stream().limit(LIST_LIMIT).toList();
+    return trips;
   }
 
   /**
@@ -91,10 +100,14 @@ public class TripsService {
     Position position = new Position();
     position.setLongitude(longitude);
     position.setLatitude(latitude);
+    List<Trip> trips = null;
     if (origin) {
-      return this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndOriginEqualsOrderByIdDesc(0, departureDate, position);
+      trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndOriginEqualsOrderByIdDesc(0, departureDate, position);
+    } else {
+      trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndDestinationEqualsOrderByIdDesc(
+          0, departureDate, position);
     }
-    return this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndDestinationEqualsOrderByIdDesc(0, departureDate, position);
+    return trips.stream().limit(LIST_LIMIT).toList();
   }
 
   public List<Trip> getAll(LocalDate departureDate, double originLon, double originLat, double destinationLon, double destinationLat) {
@@ -105,6 +118,7 @@ public class TripsService {
     destination.setLongitude(destinationLon);
     destination.setLatitude(destinationLat);
     List<Trip> trips = this.repository.getTripsByAvailableSeatingGreaterThanAndDepartureEqualsAndOriginEqualsAndDestinationEqualsOrderByIdDesc(0, departureDate, origin, destination);
+    trips = trips.stream().limit(LIST_LIMIT).toList();
     //TODO sort by distance
     int distance = this.getDistance(origin, destination);
     System.out.println(distance);
